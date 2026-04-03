@@ -1,0 +1,51 @@
+# Core Beliefs
+
+These are the operating principles for agent-driven development in this project. Agents should treat these as hard constraints unless explicitly overridden in a specific execution plan.
+
+## 1. Repository Is the Source of Truth
+
+All knowledge lives in the repository. Decisions made in conversations, chat threads, or meetings must be captured as versioned artifacts (markdown, code, config) or they effectively don't exist. If it isn't in the repo, it isn't real.
+
+## 2. Map, Not Manual
+
+Agent-facing documentation should be concise and navigational. Tell agents where to look, not what to think. A 100-line entry point with pointers is better than a 1000-line instruction manual. Every document an agent reads should be worth reading.
+
+## 3. Parse, Don't Assume
+
+Validate data shapes at system boundaries. Use typed schemas, parse incoming data, and fail explicitly on malformed input. Never build on assumed shapes. Never trust data from outside the system boundary.
+
+## 4. Fail Explicitly, Not Silently
+
+Every error path must produce a clear signal. No swallowed exceptions, no silent fallbacks that hide broken state. If something goes wrong, the system should say so loudly and immediately. Prefer idempotent operations that can be safely retried.
+
+## 5. Shared Utilities Over Hand-Rolled Helpers
+
+Prefer centralized, tested utility modules over ad-hoc helpers scattered across the codebase. When the same pattern appears twice, extract it. This keeps invariants centralized and reduces agent confusion.
+
+## 6. Enforce Boundaries Mechanically
+
+Architectural constraints (dependency direction, naming conventions, layer rules) should be enforced by linters and tests, not by documentation alone. If a rule can be checked by a machine, it should be. Use least-privilege access for all service accounts and credentials.
+
+<!-- TODO: Set up mechanical enforcement for your stack. Examples:
+     - Rust: `cargo clippy -- -D warnings` + `rustfmt` in CI
+     - TypeScript: eslint with import boundary rules + strict tsconfig
+     - Python: ruff/flake8 + mypy strict mode
+     - Go: golangci-lint + go vet
+     Add a CI step that blocks merge on lint failures.
+     Write structural tests for critical invariants (e.g., "no module in layer A imports from layer B"). -->
+
+## 7. Boring Technology Is a Feature
+
+Favor composable, API-stable, well-documented technologies. Agents reason better about tools with extensive documentation and predictable behavior. When a dependency is opaque, consider reimplementing the needed subset — tightly integrated, fully tested, fully legible.
+
+## 8. Every Change Is Reversible
+
+Prefer small, incremental changes that are easy to review and revert. Large, sweeping changes are harder for both humans and agents to verify. A series of small PRs beats one giant refactor.
+
+## 9. Secrets Never Enter the Repository
+
+Use environment variables or dedicated secret management tools. Never commit credentials, API keys, or tokens. Log security-relevant events (auth failures, permission denials, input validation errors) but never log secrets.
+
+## 10. Technical Debt Is a Continuous Process
+
+Track debt explicitly. Pay it down in small, regular increments rather than accumulating it for painful bursts. Background cleanup is preferable to periodic overhauls.

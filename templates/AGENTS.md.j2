@@ -1,0 +1,64 @@
+# {{ project_name }}
+
+> {{ project_description }}
+
+## Quick Start
+
+<!-- TODO: Replace with your project's actual build/run/test commands. -->
+
+```
+{{ quick_start_build }}
+{{ quick_start_test }}
+```
+
+## Architecture
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the domain map, layer structure, and dependency rules.
+
+## Workflow
+
+Follow this process when working on this project:
+
+1. **Orient.** Run `harn status` to see the current project state — active sprint, plan progress, last check result. Then read the active plan or sprint in [`docs/exec-plans/active/`](docs/exec-plans/active/) to understand the current goal.
+2. **Know the quality bar.** Read [`docs/evaluation/criteria.md`](docs/evaluation/criteria.md). Target grade B or above on every criterion.
+3. **Respect the architecture.** Follow the layer structure and dependency rules in [ARCHITECTURE.md](ARCHITECTURE.md). Dependencies flow in one direction only.
+4. **Validate before handing off.** After completing work, self-evaluate against the criteria. Run `harn check` to verify harness integrity. If any criterion is below C, fix it before moving on.
+5. **Record decisions.** When making a non-obvious design decision, document it in [`docs/design-docs/`](docs/design-docs/) or in the execution plan's Decision Log.
+6. **Complete the unit.** When acceptance criteria are met, run `harn sprint done` to archive the sprint and optionally generate a handoff artifact.
+
+## Key Constraints
+
+<!-- TODO: Review and customize these constraints for your project. -->
+
+- **Type safety.** Use build-time type checking with end-to-end coverage. Validate external input into typed representations at system edges — parse, don't validate.
+- **Test speed.** Test suite must complete in ≤60 seconds. Fast tests keep the feedback loop tight.
+- **Dev environment.** Build-and-test cycle must start in ≤2 seconds from a clean checkout.
+- **No silent failures.** Every public API must have error handling — no swallowed errors.
+- **Dependency direction.** Dependencies flow forward only — no backward imports between layers. See [ARCHITECTURE.md](ARCHITECTURE.md).
+
+## Documentation Map
+
+| Topic | Location |
+|-------|----------|
+| Architecture & layers | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| Core beliefs | [docs/design-docs/core-beliefs.md](docs/design-docs/core-beliefs.md) |
+| Evaluation criteria | [docs/evaluation/criteria.md](docs/evaluation/criteria.md) |
+| Design decisions | [docs/design-docs/](docs/design-docs/) |
+| Active plans | [docs/exec-plans/active/](docs/exec-plans/active/) |
+| Completed plans | [docs/exec-plans/completed/](docs/exec-plans/completed/) |
+| Product specs | [docs/product-specs/](docs/product-specs/) |
+| Workflow templates | [docs/templates/](docs/templates/) |
+
+## Tooling
+
+This project uses [`harn`](https://github.com/imsuven/harn) for harness lifecycle management.
+
+| Command | Purpose |
+|---------|---------|
+| `harn check` | Validate harness structure integrity |
+| `harn plan new "description"` | Create an execution plan |
+| `harn sprint new "description"` | Create a sprint contract |
+| `harn sprint done` | Complete current sprint, optionally generate handoff |
+| `harn status` | Show current project state at a glance |
+| `harn gc` | Detect stale documentation |
+| `harn score update` | Assess and record quality grades |

@@ -1,0 +1,93 @@
+# Evaluation Criteria
+
+These criteria define what "good" means for this project. When evaluating work — whether self-evaluating or reviewing someone else's output — grade against each criterion independently.
+
+## Grading Scale
+
+| Grade | Meaning |
+|-------|---------|
+| A | Excellent — exceeds expectations, no issues |
+| B | Good — meets expectations, minor issues only |
+| C | Acceptable — meets minimum bar, notable gaps |
+| D | Below bar — significant issues that need addressing |
+| F | Failing — does not meet requirements |
+
+**Pass threshold**: Every criterion must be C or above for the work to pass.
+
+---
+
+## Criteria
+
+### 1. Functionality (Weight: High)
+
+Does the implementation do what the spec says? Do core user workflows work end-to-end?
+
+- **A**: All specified features work correctly. Edge cases handled.
+- **B**: Core features work. Minor edge cases may be unhandled.
+- **C**: Core features work with caveats. Some features may be partial.
+- **D**: Key features are broken or incomplete.
+- **F**: Primary functionality does not work.
+
+### 2. Product Depth (Weight: High)
+
+Are features fully implemented with real logic, or are they stubs and placeholders?
+
+- **A**: Features are fully implemented with real logic, state management, and feedback.
+- **B**: Features work with minor gaps in depth.
+- **C**: Some features are skeletal or stub-only.
+- **D**: Multiple features are stubs or placeholders.
+- **F**: Most features are non-functional facades.
+
+### 3. Code Quality (Weight: Medium)
+
+Is the code maintainable, well-structured, and consistent with architectural constraints?
+
+- **A**: Clean architecture, good error handling, consistent patterns, tested.
+- **B**: Generally clean. Minor inconsistencies.
+- **C**: Functional but with structural issues (unclear naming, missing error handling).
+- **D**: Significant structural problems. Hard to maintain.
+- **F**: Spaghetti code. Architectural rules violated.
+
+{% if stack == "node" or stack == "generic" %}
+### 4. Visual & UX Design (Weight: Medium)
+
+Does the interface have a coherent identity? Is it usable?
+
+- **A**: Cohesive design language, clear visual hierarchy, intuitive interactions.
+- **B**: Clean and functional. Minor design inconsistencies.
+- **C**: Usable but generic. No distinct visual identity.
+- **D**: Confusing layout or broken visual hierarchy.
+- **F**: Unusable interface.
+{% else %}
+### 4. API Ergonomics (Weight: Medium)
+
+Is the public interface (CLI, library API, config format) intuitive and well-documented?
+
+- **A**: Intuitive naming, clear error messages, discoverable options, well-documented.
+- **B**: Generally clean interface. Minor discoverability gaps.
+- **C**: Functional but requires reading source to understand usage.
+- **D**: Confusing interface, unhelpful errors, undocumented behavior.
+- **F**: Unusable without deep source reading.
+{% endif %}
+
+### 5. Originality (Weight: Low)
+
+Are there deliberate creative or architectural choices, or is this all defaults and templates?
+
+- **A**: Distinctive choices that serve the product goals.
+- **B**: Some deliberate choices visible.
+- **C**: Mostly defaults, but appropriate ones.
+- **D**: Generic "AI slop" — unmodified templates and library defaults.
+- **F**: No evidence of intentional decision-making.
+
+---
+
+## How to Use These Criteria
+
+**For the agent building the feature**: Read these criteria before starting. Target B or above on every criterion. Self-evaluate your work against these before handing off.
+
+**For the reviewing agent or human**: Grade each criterion independently. If any criterion is D or below, the work should be revised with specific feedback on what needs to change.
+
+<!-- TODO: Add few-shot calibration examples in docs/evaluation/examples/ to anchor
+     grading consistency. Include 2-3 examples showing what A vs C vs F looks like
+     for each criterion in the context of this project. -->
