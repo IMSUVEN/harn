@@ -1,0 +1,65 @@
+mod helpers;
+
+use helpers::TempProject;
+
+fn init_project(project: &TempProject) {
+    let output = project.run_harn(&["init", "--tools", "codex", "--stack", "rust"]);
+    assert!(output.status.success());
+}
+
+#[test]
+fn upgrade_dry_run() {
+    let project = TempProject::with_git();
+    init_project(&project);
+
+    let output = project.run_harn(&["upgrade", "--dry-run"]);
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("Dry run"));
+}
+
+#[test]
+fn upgrade_unchanged_files_are_up_to_date() {
+    let project = TempProject::with_git();
+    init_project(&project);
+
+    let output = project.run_harn(&["upgrade"]);
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("already up to date"));
+}
+
+#[test]
+fn upgrade_modified_files_get_sidecar() {
+    let project = TempProject::with_git();
+    init_project(&project);
+
+    // Modify AGENTS.md (makes its hash differ from init hash)
+    let agents = project.read_file("AGENTS.md");
+    let modified = format!("{agents}\n## Custom Section\n\nMy custom content.\n");
+    std::fs::write(project.path().join("AGENTS.md"), modified).unwrap();
+
+    let output = project.run_harn(&["upgrade"]);
+    assert!(output.status.success());
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("sidecar"));
+
+    assert!(project.file_exists("AGENTS.md.harn-upgrade"));
+}
+
+#[test]
+fn upgrade_preserves_modified_files() {
+    let project = TempProject::with_git();
+    init_project(&project);
+
+    let custom_content = "# My Custom AGENTS.md\n\nCompletely custom.\n";
+    std::fs::write(project.path().join("AGENTS.md"), custom_content).unwrap();
+
+    project.run_harn(&["upgrade"]);
+
+    let content = project.read_file("AGENTS.md");
+    assert_eq!(content, custom_content);
+}
