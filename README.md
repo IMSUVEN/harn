@@ -72,7 +72,7 @@ $ harn gc
 
 ## Status
 
-**Pre-implementation.** Design documents are finalized and ready for review.
+**v0.1.0** — All 8 commands implemented and tested (91 tests, <1s full suite). Ready for dogfooding.
 
 ## Design Documents
 
