@@ -21,16 +21,18 @@ harn/
 │   ├── main.rs              # Entry point
 │   ├── cli.rs               # clap argument parsing, subcommand dispatch
 │   ├── config.rs            # .agents/harn/config.toml read/write
+│   ├── types.rs             # Newtypes: Slug, ProjectName, HarnDate, etc.
 │   ├── detect.rs            # Project environment detection
 │   ├── init/
 │   │   ├── mod.rs           # Init orchestration
-│   │   ├── prompt.rs        # Interactive prompts (dialoguer)
-│   │   └── render.rs        # Template rendering
+│   │   └── render.rs        # Template rendering (minijinja + include_dir!)
 │   ├── plan.rs              # Execution plan management
 │   ├── sprint.rs            # Sprint contract management
 │   ├── check.rs             # Structural validation
+│   ├── status.rs            # Project state aggregation
 │   ├── score.rs             # Quality score management
-│   └── gc.rs                # Staleness detection (git2)
+│   ├── gc.rs                # Staleness detection (git2)
+│   └── upgrade.rs           # Hash-based template upgrade
 ├── templates/               # Embedded template files
 │   ├── AGENTS.md.j2
 │   ├── CLAUDE.md.j2
@@ -52,8 +54,8 @@ User invokes `harn init`
   ├─→ detect.rs: scan project root for signals
   │     (git, package managers, existing AI tool configs)
   │
-  ├─→ prompt.rs: ask only what can't be detected
-  │     (AI tools, advanced options if requested)
+  ├─→ mod.rs: resolve what can't be detected
+  │     (AI tools, options via CLI args or interactive prompts)
   │
   ├─→ render.rs: populate templates with context
   │     (project name, date, stack, selected tools)
@@ -291,14 +293,17 @@ Integration and e2e tests create a fresh temp directory, optionally run `git ini
 
 ```
 tests/
+├── architecture.rs  # Structural tests for ARCHITECTURE.md dependency rules
 ├── init.rs          # Integration tests for harn init
 ├── check.rs         # Integration tests for harn check
 ├── plan.rs          # Integration tests for harn plan
 ├── sprint.rs        # Integration tests for harn sprint
-├── gc.rs            # Integration tests for harn gc
+├── status_gc.rs     # Integration tests for harn status + gc
 ├── score.rs         # Integration tests for harn score
+├── upgrade.rs       # Integration tests for harn upgrade
+├── e2e.rs           # End-to-end multi-command workflow tests
 └── helpers/
-    └── mod.rs       # Shared test utilities (temp dir setup, config builders)
+    └── mod.rs       # Shared test utilities (TempProject, harn binary runner)
 ```
 
 Unit tests live inline in `src/` modules via `#[cfg(test)] mod tests`.

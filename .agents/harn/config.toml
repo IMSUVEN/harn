@@ -13,11 +13,9 @@ agents = ["codex", "claude-code"]
 stack = "rust"
 
 [init.file_hashes]
-# Hand-authored files — no init hashes. harn treats these as already-customized.
-# Only workflow templates retain hashes (they were copied verbatim from harn's own templates/).
-"docs/templates/exec-plan.md" = "8ca0cedd825b240642883a838ddc3966da3bf2632d78d5ce995182639cbe520c"
-"docs/templates/sprint-contract.md" = "a6997fbd077467652388987b1fc626b781548de6077d5e3c6eedfd004f80b29c"
-"docs/templates/handoff.md" = "404b30bd0ba3780249826fa1a432e73e8f0cdbd9e43d29b6f23394a2bae3ce20"
+# No init hashes tracked. harn's own docs are all hand-authored (already customized).
+# Workflow templates (exec-plan.md, sprint-contract.md, handoff.md) ARE the canonical
+# source that harn embeds — tracking them would produce false "not customized" warnings.
 
 [check]
 required_files = [

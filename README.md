@@ -11,13 +11,14 @@ AI coding agents are context-dependent. Their output quality is bounded by the *
 `harn` is a harness lifecycle tool. It bootstraps and maintains the knowledge and workflow layer that makes agents effective. It does not orchestrate agents — that's your AI coding tool's job (Cursor, Codex, Claude Code, etc.). `harn` gives those tools a well-structured environment to operate in.
 
 ```
-harn init          # scaffold harness structure (10 files, every one substantive)
+harn init          # scaffold harness structure
 harn check         # validate structural integrity
 harn status        # show current project state at a glance
 harn plan          # manage execution plans
 harn sprint        # manage sprint contracts
 harn gc            # detect stale docs via git history
 harn score         # view and update quality grades
+harn upgrade       # update templates to latest harn version
 ```
 
 ## Supported AI Tools
@@ -36,55 +37,22 @@ Both point to the same `docs/` knowledge structure.
 
 ## Quick Start
 
-```
-$ cargo install harn
-$ mkdir my-project && cd my-project && git init
-$ harn init
-
-Detecting project environment...
-  ✓ Git repository
-  ✗ No package manager detected (generic project)
-  ✗ No AI tool configs detected
-
-AI coding tools [codex, claude-code]: ↵
-
-Creating harness structure...
-  ✓ AGENTS.md
-  ✓ CLAUDE.md
-  ✓ ARCHITECTURE.md
-  ✓ .agents/harn/config.toml
-  ✓ docs/ (6 files, 4 empty dirs)
-
-Done! Created 10 files.
-
-$ harn check
-  ✓ All checks passed (2 warnings: uncustomized templates)
-
-# ... develop with your AI coding tool ...
-
-$ harn plan new "user authentication"
-$ harn sprint new "implement login page" --plan user-authentication
-# ... work ...
-$ harn sprint done
-$ harn gc
-  ✓ All documentation is current.
+```bash
+cargo install harn
+cd my-project
+harn init
 ```
 
-## Status
-
-**v0.1.0** — All 8 commands implemented and tested (91 tests, <1s full suite). Ready for dogfooding.
-
-## Design Documents
-
-| Document | Contents |
-|----------|----------|
-| [Product Spec](docs/product-spec.md) | Motivation, scope, target users, UX design |
-| [Design](docs/design.md) | Architecture, alternatives, gc design, dependencies |
-| [Commands](docs/commands.md) | Full command reference with examples |
-| [Generated Content](docs/generated-content.md) | What each template file contains (the core value spec) |
-| [HARNESS-SPEC.md](docs/HARNESS-SPEC.md) | The underlying harness engineering specification |
-| [HARNESS-GUIDE.md](docs/HARNESS-GUIDE.md) | Companion guide: reasoning, examples, decision frameworks |
+`harn init` detects your stack and AI tools, then scaffolds the complete harness structure. Customize the generated files, then use `harn check` to validate integrity.
 
 ## Configuration
 
 Config lives at `.agents/harn/config.toml`, following the community `.agents/` convention.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines. For agents, see [AGENTS.md](AGENTS.md).
+
+## License
+
+MIT

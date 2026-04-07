@@ -155,6 +155,9 @@ harn check [OPTIONS]
 | Content | Init-generated files were customized (hash differs from init) | Warning |
 | References | Cross-references in AGENTS.md resolve to existing files | Error |
 | Config | `.agents/harn/config.toml` is valid and consistent | Error |
+| Quality | AGENTS.md exceeds 150 lines (should be a concise map) | Warning |
+| Quality | ARCHITECTURE.md missing dependency direction statement | Warning |
+| Quality | `docs/QUALITY_SCORE.md` does not exist | Warning |
 
 ### Example
 

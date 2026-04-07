@@ -55,74 +55,19 @@ Template variables are shown as `{{variable}}`.
 **Design principles**:
 - **Map, not manual.** Pointers to deeper docs, not lengthy instructions.
 - **Workflow, not just index.** Tell agents what to DO, not just where to look.
-- **Tooling awareness.** Agents should know `harn` exists and what commands are available.
+- **Stack-aware Quick Start.** Build/test/lint commands are inline Jinja conditionals per stack — no generic placeholders.
+- **Two-tier Documentation Map.** "Implementation docs" (read always) vs "Reference & workflow" (consult when needed).
+- **Safety by default.** Includes a "Stop on ambiguity" constraint.
 
-````markdown
-# {{project_name}}
+**Template variables**: `project_name`, `project_description`, `stack` (used in `{% if stack == "rust" %}` conditionals).
 
-> {{project_description | default: "TODO: Describe your project in 1-2 sentences."}}
+The template renders stack-specific Quick Start commands, constraints, and a split Documentation Map. See the full template in `templates/AGENTS.md.j2`. Key sections:
 
-## Quick Start
-
-<!-- TODO: Replace with your project's actual build/run/test commands. -->
-
-```
-{{quick_start_build | default: "# build"}}
-{{quick_start_test | default: "# test — target ≤60 seconds"}}
-```
-
-## Architecture
-
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the domain map, layer structure, and dependency rules.
-
-## Workflow
-
-Follow this process when working on this project:
-
-1. **Orient.** Run `harn status` to see the current project state — active sprint, plan progress, last check result. Then read the active plan or sprint in [`docs/exec-plans/active/`](docs/exec-plans/active/) to understand the current goal.
-2. **Know the quality bar.** Read [`docs/evaluation/criteria.md`](docs/evaluation/criteria.md). Target grade B or above on every criterion.
-3. **Respect the architecture.** Follow the layer structure and dependency rules in [ARCHITECTURE.md](ARCHITECTURE.md). Dependencies flow in one direction only.
-4. **Validate before handing off.** After completing work, self-evaluate against the criteria. Run `harn check` to verify harness integrity. If any criterion is below C, fix it before moving on.
-5. **Record decisions.** When making a non-obvious design decision, document it in [`docs/design-docs/`](docs/design-docs/) or in the execution plan's Decision Log.
-6. **Complete the unit.** When acceptance criteria are met, run `harn sprint done` to archive the sprint and optionally generate a handoff artifact.
-
-## Key Constraints
-
-<!-- TODO: Review and customize these constraints for your project. -->
-
-- **Type safety.** Use build-time type checking with end-to-end coverage. Validate external input into typed representations at system edges — parse, don't validate.
-- **Test speed.** Test suite must complete in ≤60 seconds. Fast tests keep the feedback loop tight.
-- **Dev environment.** Build-and-test cycle must start in ≤2 seconds from a clean checkout.
-- **No silent failures.** Every public API must have error handling — no swallowed errors.
-- **Dependency direction.** Dependencies flow forward only — no backward imports between layers. See [ARCHITECTURE.md](ARCHITECTURE.md).
-
-## Documentation Map
-
-| Topic | Location |
-|-------|----------|
-| Architecture & layers | [ARCHITECTURE.md](ARCHITECTURE.md) |
-| Core beliefs | [docs/design-docs/core-beliefs.md](docs/design-docs/core-beliefs.md) |
-| Evaluation criteria | [docs/evaluation/criteria.md](docs/evaluation/criteria.md) |
-| Design decisions | [docs/design-docs/](docs/design-docs/) |
-| Active plans | [docs/exec-plans/active/](docs/exec-plans/active/) |
-| Completed plans | [docs/exec-plans/completed/](docs/exec-plans/completed/) |
-| Product specs | [docs/product-specs/](docs/product-specs/) |
-| Workflow templates | [docs/templates/](docs/templates/) |
-
-## Tooling
-
-This project uses [`harn`](https://github.com/imsuven/harn) for harness lifecycle management.
-
-| Command | Purpose |
-|---------|---------|
-| `harn check` | Validate harness structure integrity |
-| `harn plan new "description"` | Create an execution plan |
-| `harn sprint new "description"` | Create a sprint contract |
-| `harn sprint done` | Complete current sprint, optionally generate handoff |
-| `harn status` | Show current project state at a glance |
-| `harn gc` | Detect stale documentation |
-| `harn score update` | Assess and record quality grades |
-````
+- **Quick Start**: Stack-conditional code block (Rust: `cargo build/test/clippy/fmt`; Node: `npm install/test/lint`; Python: `pip/pytest/ruff`; Go: `go build/test/vet`; Generic: TODO placeholder).
+- **Workflow**: 5 steps (Orient → Quality bar → Architecture → Validate → Record decisions).
+- **Key Constraints**: Type safety, no silent failures, dependency direction, test speed, stop on ambiguity.
+- **Documentation Map**: Split into "Implementation docs" (3 rows: architecture, core beliefs, criteria) and "Reference & workflow" (4 rows: design decisions, plans, completed plans, templates).
+- **Tooling**: harn command reference table (7 commands).
 
 ---
 
@@ -152,144 +97,21 @@ All project context — architecture, workflow, constraints, evaluation criteria
 
 ### ARCHITECTURE.md
 
-**Purpose**: Top-level architecture map. Defines domains, layers, and dependency rules.
+**Purpose**: Top-level architecture map. Defines crate/module structure, dependency rules, and common mistakes.
 
 **Audience**: Agents and humans.
 
-**Design principle**: The structural truth of the project. The layer structure is pre-selected based on the detected stack rather than dumping all variations as comments. The key invariant across all stacks: **dependencies flow in one direction only**.
+**Design principle**: The structural truth of the project. Provides TODO-driven scaffolding for the user to fill in their actual module tree and dependency graph. Stack-specific hints guide boundary enforcement tooling. Includes a "Common Mistakes" section stub — the guide recommends calling out the 3-4 things a newcomer is most likely to get wrong.
 
-**Stack-aware rendering**: The template uses `{{stack}}` to select the most relevant layer structure. The user can always modify it after init.
+**Template variables**: `stack` (used in `{% if stack == "..." %}` conditionals for boundary enforcement hints).
 
-````markdown
-# Architecture
+The template renders these sections. See the full template in `templates/ARCHITECTURE.md.j2`:
 
-## System Overview
-
-<!-- TODO: Describe what this system does at a high level. 2-3 sentences. -->
-
-## Technology Stack
-
-{% if stack == "rust" %}
-| Layer | Technology |
-|-------|-----------|
-| Language | Rust |
-| Build | Cargo |
-| Framework | TODO |
-{% elif stack == "node" %}
-| Layer | Technology |
-|-------|-----------|
-| Language | TypeScript / JavaScript |
-| Build | npm / pnpm |
-| Framework | TODO |
-{% elif stack == "python" %}
-| Layer | Technology |
-|-------|-----------|
-| Language | Python |
-| Build | pip / uv |
-| Framework | TODO |
-{% elif stack == "go" %}
-| Layer | Technology |
-|-------|-----------|
-| Language | Go |
-| Build | go build |
-| Framework | TODO |
-{% else %}
-| Layer | Technology |
-|-------|-----------|
-| Language | TODO |
-| Build | TODO |
-| Framework | TODO |
-{% endif %}
-
-## Domain Map
-
-<!-- TODO: List the business domains of your project. Each domain is a logical unit
-     with its own responsibilities. Examples: "auth", "billing", "notifications". -->
-
-| Domain | Description | Primary Path |
-|--------|-------------|-------------|
-| | | |
-
-## Layer Structure
-
-Code within each domain follows a fixed layer order. Dependencies flow forward only — no backward imports.
-
-{% if stack == "rust" %}
-```
-Types → Core → IO → CLI
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | Data structures, enums, error types (`src/types/` or per-module) |
-| Core | Business logic, domain rules, pure computation (no I/O) |
-| IO | File system, network, database — all side effects live here |
-| CLI | Argument parsing, subcommand dispatch, user-facing output |
-{% elif stack == "node" %}
-```
-Types → Service → Routes → Middleware
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | TypeScript interfaces, schemas, shared type definitions |
-| Service | Business logic, domain rules, database access |
-| Routes | HTTP handlers, request/response mapping |
-| Middleware | Auth, validation, error handling, logging |
-{% elif stack == "python" %}
-```
-Types → Domain → Adapters → Entrypoints
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | Data classes, Pydantic models, shared type definitions |
-| Domain | Business logic, domain rules, pure computation |
-| Adapters | Database, external APIs, file I/O |
-| Entrypoints | CLI commands, API endpoints, event handlers |
-{% elif stack == "go" %}
-```
-Types → Domain → Infra → Transport
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | Structs, interfaces, error types (`internal/types/`) |
-| Domain | Business logic, domain rules, pure computation |
-| Infra | Database, external services, file I/O |
-| Transport | HTTP handlers, gRPC, CLI commands |
-{% else %}
-```
-Types → Core → Integration → Interface
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | Data structures, enums, error types, shared type definitions |
-| Core | Business logic, domain rules, pure computation |
-| Integration | External dependencies: databases, APIs, file I/O, network |
-| Interface | Entry points: API endpoints, CLI handlers, UI components |
-{% endif %}
-
-<!-- If this layering doesn't fit your project, adapt it. The key invariant is:
-     dependencies flow in ONE direction. No backward imports between layers. -->
-
-## Cross-Cutting Concerns
-
-Shared capabilities that domains access through explicit interfaces:
-
-- **Error handling**: [TODO: your error strategy]
-- **Logging**: [TODO: structured logging approach]
-- **Configuration**: [TODO: centralized vs per-domain]
-
-## Key Decisions
-
-<!-- Record significant architectural decisions here, or link to docs/design-docs/. -->
-
-| Decision | Rationale | Date |
-|----------|-----------|------|
-| | | |
-````
+- **System Overview**: TODO placeholder for 2-3 sentence high-level description.
+- **Crate Structure**: TODO placeholder for the actual module/package tree in a code block.
+- **Module Dependency Rules**: "Dependencies flow downward only" invariant, TODO placeholder for actual dependency graph, stack-specific enforcement hints (Rust: `cargo clippy`; Node: ESLint import rules; Python: import linting; Go: `go vet`).
+- **Common Mistakes**: 3 TODO items prompting the user to document the most common dependency direction violation, misplaced responsibility, and type safety violation.
+- **Cross-Cutting Concerns**: TODO placeholders for error handling, logging, and configuration strategies.
 
 ---
 
@@ -649,7 +471,7 @@ stack = "{{stack}}"
 
 [init.file_hashes]
 # SHA-256 hashes of generated files at init time.
-# Used by `harn gc` to detect uncustomized templates.
+# Used by `harn check` and `harn gc` to detect uncustomized templates.
 # "AGENTS.md" = "abcdef1234567890..."
 
 [check]
@@ -662,10 +484,13 @@ required_files = [
 [gc]
 stale_threshold_days = 14
 ignore_paths = []
+# Add paths to exclude from gc analysis:
+# ignore_paths = ["docs/HARNESS-SPEC.md", "docs/HARNESS-GUIDE.md"]
 
+# Map documentation to related code for divergence detection:
 # [[gc.mappings]]
-# doc = "docs/product-specs/example.md"
-# code = ["src/example/"]
+# doc = "docs/api-reference.md"
+# code = ["src/routes/", "src/handlers/"]
 ```
 
 ---
