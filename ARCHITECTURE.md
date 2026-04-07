@@ -12,21 +12,33 @@ harn/
 │   ├── main.rs          # Entry point: parse args, dispatch to commands
 │   ├── cli.rs           # clap derive definitions, subcommand routing
 │   ├── config.rs        # .agents/harn/config.toml read/write (serde + toml)
+│   ├── types.rs         # Newtypes: Slug, ProjectName, HarnDate, HarnPath, Stack, AiTool
 │   ├── detect.rs        # Project environment detection (git, package managers, AI tools)
 │   ├── init/
-│   │   ├── mod.rs       # Init orchestration: detect → prompt → render → write
-│   │   ├── prompt.rs    # Interactive prompts (dialoguer)
-│   │   └── render.rs    # Template rendering (minijinja)
+│   │   ├── mod.rs       # Init orchestration: detect → resolve → render → write
+│   │   └── render.rs    # Template rendering (minijinja + include_dir!)
+│   ├── check.rs         # Structural validation (file existence, cross-refs, hashes)
 │   ├── plan.rs          # Execution plan management (new, list, complete)
 │   ├── sprint.rs        # Sprint contract management (new, status, done)
-│   ├── check.rs         # Structural validation (file existence, cross-refs, hashes)
-│   ├── score.rs         # Quality score display and update
-│   └── gc.rs            # Staleness detection via git history (git2)
+│   ├── status.rs        # Project state aggregation and display
+│   ├── gc.rs            # Staleness detection via git history (git2)
+│   ├── score.rs         # Quality score display and interactive update
+│   └── upgrade.rs       # Hash-based template upgrade with sidecar strategy
 ├── templates/           # Embedded at compile time via include_dir!
 │   ├── AGENTS.md.j2
 │   ├── CLAUDE.md.j2
 │   ├── ARCHITECTURE.md.j2
 │   └── docs/            # Mirrors the generated docs/ tree
+├── tests/
+│   ├── helpers/mod.rs   # TempProject: temp dir + git init + harn binary runner
+│   ├── init.rs          # Integration tests for harn init
+│   ├── check.rs         # Integration tests for harn check
+│   ├── plan.rs          # Integration tests for harn plan
+│   ├── sprint.rs        # Integration tests for harn sprint
+│   ├── status_gc.rs     # Integration tests for harn status + gc
+│   ├── score.rs         # Integration tests for harn score
+│   ├── upgrade.rs       # Integration tests for harn upgrade
+│   └── e2e.rs           # End-to-end multi-command workflow tests
 └── Cargo.toml
 ```
 
@@ -37,15 +49,18 @@ Dependencies flow **downward only**. No module may import from a module above it
 ```
 main.rs
   └── cli.rs
-        ├── init/       → config, detect
-        ├── plan.rs     → config
-        ├── sprint.rs   → config
+        ├── init/       → config, detect, types
         ├── check.rs    → config
-        ├── score.rs    → config
-        └── gc.rs       → config, git2
+        ├── plan.rs     → types
+        ├── sprint.rs   → types
+        ├── status.rs   → config, sprint
+        ├── gc.rs       → config, git2
+        ├── score.rs    → types
+        └── upgrade.rs  → config, init/render
 ```
 
 - `cli.rs` dispatches to command modules. Command modules depend on `config.rs` and domain-specific crates.
 - `config.rs` is a shared dependency for all commands. It owns the `Config` type and all config I/O.
+- `types.rs` defines the newtype vocabulary (`Slug`, `ProjectName`, `HarnDate`, `HarnPath`, `Stack`, `AiTool`). Used across all modules.
 - `detect.rs` is used only by `init/`. No other module should call detection logic.
 - `templates/` is a compile-time asset directory, not a runtime module. Accessed via `include_dir!` in `init/render.rs`.
