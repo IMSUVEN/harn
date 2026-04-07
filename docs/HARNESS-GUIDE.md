@@ -30,6 +30,16 @@ These contradictions cannot be resolved — only managed. The harness is the man
 
 This framing has a practical consequence: it tells you which harness components are permanent and which are temporary. Components that manage a fundamental contradiction — linters against entropy, separate evaluators against self-delusion, structured plans against drift — are engineering fundamentals. They stay. Components that compensate for a current model weakness — sprint decomposition because context windows are too short, context resets because compaction doesn't work well enough — are scaffolding. They go when the model improves. This is exactly the distinction the spec draws in §4.3.
 
+**The contradictions are recursive.** They act not only on the agent's work, but on the harness itself. The harness literalizes human intent into rules — satisfying every rule does not guarantee the intent is met (intent transfer). The harness designer evaluates their own design with the same structural bias that agents exhibit when evaluating their own code (self-evaluation). Harness patterns replicate across projects and calcify into convention, even when conditions change (entropy). The management apparatus is subject to the forces it manages.
+
+This produces three nested feedback loops, each requiring the same three properties — fast feedback, honest feedback, structural correction — but operating at different timescales:
+
+- **The agent loop** (minutes). Agent acts, environment responds, agent adjusts. The harness designs this loop. The spec prescribes its properties: fast (§1.5, §1.6), honest (§1.2, §1.5), structural (§1.4, §4.1).
+- **The harness loop** (weeks to months). The harness constrains the agent, outcomes are observed, the harness is adjusted. The spec addresses this in §4.3; this guide develops it in §6. Its feedback comes from outcome metrics and human judgment — not from the designer's intuition, for the same reason agent quality doesn't come from the agent's self-assessment.
+- **The discipline loop** (years). The principles guiding harness design are tested against accumulating experience across teams and contexts. The convergent discoveries in §7 are evidence from this loop. Its feedback is the slowest and least controlled.
+
+Each loop depends on feedback external to itself. The agent cannot honestly evaluate its own output — so the harness provides external signal. The harness designer cannot honestly evaluate their own design — so outcome data and independent review provide external signal. The discipline cannot validate its own principles from within — so empirical results across the community provide external signal. The self-evaluation contradiction is recursive all the way up.
+
 These contradictions are what make the three axioms necessary. The next section unpacks those axioms and shows how every harness design decision traces back to them.
 
 ---
@@ -66,6 +76,8 @@ This means investing human attention at the leverage points: designing the AGENT
 - **Scope explosion.** The agent adds features nobody asked for. Root cause: human intent was vague — the prompt or plan didn't define boundaries. Fix: ExecPlan with bounded milestones and explicit acceptance criteria (Spec §2.2).
 - **Decision paralysis.** The agent asks for help on something it could decide. Root cause: the steering is contradictory or over-constrained — conflicting instructions in AGENTS.md, or rules that leave no room for legitimate agent judgment. Fix: simplify the instructions; resolve contradictions.
 
+**Self-application.** This axiom applies to the harness itself: the harness does not steer itself. Humans steer the harness based on evidence about its performance — through observable health indicators (Spec §4.3), not through assumption that the design is working. A harness that runs on autopilot, never questioned or adjusted, violates Axiom 1 at the meta level: the management apparatus has escaped governance.
+
 ### 2.2 Axiom 2: Start Simple; Earn Complexity
 
 **The question:** How should the harness evolve over time?
@@ -88,6 +100,8 @@ The practical test: "Would a brilliant human engineer also benefit from this con
 - **Static harness design.** Team builds the harness once and never revisits it. Scaffolding that was necessary two model generations ago is still running, adding latency and cost without improving output. Fix: simplification sprint after each model upgrade (Spec §4.3).
 - **Over-specified plans.** Planner produces granular implementation instructions. When it gets a detail wrong, the error cascades into the build because the generator follows instructions literally. Fix: high-level spec + negotiated sprint contracts (Spec §2.2, §2.3).
 
+**Self-application.** This axiom governs the harness's own measurement apparatus. Don't build an elaborate harness health dashboard before you have a working harness. Track one or two indicators at Level 1 — human intervention rate is the simplest starting point. Add sophistication only when simple indicators demonstrably fail to capture a real problem. The harness's own feedback loop earns its complexity the same way the agent's harness does.
+
 ### 2.3 Axiom 3: Everything Is a Loop
 
 **The question:** What is the fundamental mechanism by which agentic work produces good output?
@@ -108,6 +122,8 @@ Think of the loop as a learning system. Your job is not to fix each output. Your
 - **Pattern replication.** New code copies a bad pattern from elsewhere in the codebase. Root cause: the loop has no structural correction for this class of error — no linter rule, no golden-principle enforcement. The agent imitates what it sees. Fix: promote the fix to a linter rule; run entropy-detection agents (Spec §1.4, §4.1).
 - **Silent tool failure.** Agent proceeds despite a tool error because the tool returned ambiguous output. Root cause: the feedback was dishonest — the tool didn't fail loudly enough. Fix: poka-yoke — redesign the tool to fail clearly and unambiguously (Spec §1.3).
 - **Test avoidance.** Agent writes code but skips or skims tests. Root cause: the loop either doesn't enforce coverage or the suite is too slow to run frequently. Fix: 100% coverage target with a fast suite (Spec §1.5).
+
+**Self-application.** If everything is a loop, the harness must be in one — not as an afterthought, but as an explicitly designed feedback cycle. The harness loop requires the same three properties as the agent loop: fast feedback (observable metrics, tracked regularly), honest feedback (outcome data, not designer intuition), and structural correction (retiring obsolete components and promoting effective ones). A harness revised only when something visibly breaks is the meta-level equivalent of an agent that only runs tests when it feels uncertain. See §6.3 for the full harness loop model.
 
 ### 2.4 Reading Failures Through the Axioms
 
@@ -482,29 +498,40 @@ The key in both cases is frequency. A weekly cleanup that produces a 500-line PR
 
 > Spec reference: §4.3 Harness Evolution
 
-After a model upgrade, schedule a "simplification sprint": systematically test whether each scaffolding component is still load-bearing.
+After a model upgrade — or when harness health indicators suggest stagnation — schedule a "simplification sprint": systematically test whether each scaffolding component is still load-bearing.
 
 Method:
 1. List all scaffolding components (sprint decomposition, context resets, separate evaluator, etc.).
-2. For each, disable it and run a representative task.
-3. Compare output quality with and without the component.
-4. If quality is equivalent, remove the component permanently.
+2. Define a representative task set — 3-5 tasks covering the range of work the harness typically handles (a simple feature, a complex feature, a bug fix, a refactor). Reuse the same task set across sprints for comparability.
+3. For each component, disable it and run the task set. Compare output quality against the baseline (component enabled). "Quality" means the outcome indicators you track (Spec §4.3): completion rate, defect escape rate, and any project-specific criteria. Commit to decision criteria before seeing results.
+4. If quality is equivalent, remove the component permanently. If quality degrades, keep it. If ambiguous, run a second round with different tasks before deciding.
 
-Be honest about the results. It's tempting to keep components that feel valuable but aren't measurably improving output. Every unnecessary component adds latency, cost, and orchestration surface area.
+Be honest about the results — and be aware that honesty is structurally difficult here. The self-evaluation contradiction applies: if you designed the component, you are biased toward keeping it. Where possible, have someone other than the component's author interpret the results.
 
 What you'll typically find: some components are clearly still needed, some are clearly obsolete, and a few are in a gray zone where they help on hard tasks but are overhead on easy ones. For the gray zone, consider making the component opt-in rather than default.
 
-### 6.3 Evolving Your Harness
+### 6.3 The Harness Loop
 
-A harness is a living system, not a one-time setup. Expect to make meaningful changes to it every few weeks, driven by three inputs:
+Axiom 3 says everything is a loop — including the harness itself. The harness loop is: *the harness constrains the agent → outcomes are observed → the harness is adjusted*. This loop operates on a longer cycle than the agent loop (weeks, not minutes), but it demands the same three properties.
+
+**Fast feedback.** Track harness health indicators regularly, not only after model upgrades. The simplest starting point is human intervention rate: how often do you override, correct, or redo agent work? If this rate decreases over time, the harness is learning. If it's flat or increasing, the harness has unresolved feedback gaps. As the harness matures, add more specific indicators — defect escape rate, component trigger frequency — but don't over-invest in measurement infrastructure early (Axiom 2).
+
+**Honest feedback.** The self-evaluation contradiction applies at this level: you are biased toward your own harness design. Three practices counteract this. First, evaluate with outcome data (completion rate, defect rate), not subjective assessment. Second, run simplification sprints (§6.2) with pre-committed decision criteria. Third, pay attention to the agent's behavior as a signal — if the agent consistently works around a constraint rather than benefiting from it, the constraint may be misdesigned.
+
+**Structural correction.** The harness evolves through two complementary operations:
+
+- *Component retirement.* When a scaffolding component is no longer load-bearing — because the model improved, the codebase matured, or the workflow changed — remove it. This is the defense against harness entropy: unnecessary components accumulate cost and obscure the ones that matter.
+- *Component promotion.* When a practice proves its value repeatedly, elevate it: a documented convention becomes a linter rule; a SHOULD that turns out to be critical becomes a MUST. Each promotion converts tacit knowledge into mechanical enforcement.
+
+Three inputs trigger adjustments:
 
 **Model changes.** A new model release may obsolete scaffolding or enable new capabilities. Run the simplification sprint (§6.2).
 
-**Failure patterns.** When you see a failure repeat, trace it to a harness gap. The discipline is: don't just fix the output; fix the loop that produced the output. Over time, this makes the harness uniquely adapted to your project.
+**Failure patterns.** When a failure repeats, trace it to a harness gap. The discipline is: don't fix the output; fix the loop that produced the output. Over time, this makes the harness uniquely adapted to your project.
 
 **Scale changes.** Growing the team, adding a new service, entering a new domain — each may shift the optimal harness configuration. A harness designed for a 10-file microservice won't serve a 500-file monorepo without adjustment.
 
-The sign of a healthy harness: the rate of human intervention decreases over time, while throughput and quality increase. If you're intervening more as time passes, the harness is accumulating unresolved feedback loops.
+The sign of a healthy harness: the rate of human intervention decreases over time, while throughput and quality increase. If you're intervening more as time passes, the harness has unresolved feedback loops — and the diagnostic framework in §2.4 applies to the harness itself, not only to agent output.
 
 ---
 
@@ -539,3 +566,19 @@ Harness engineering is young. Several questions remain open. For each, we note t
 - **What's the right cost model?** At $10-12/hr per agent, Level 3 operations cost thousands per day. Is this justified by output quality? Under what conditions? The industry doesn't have robust benchmarks yet. *Framework: Axiom 2 says start simple and earn complexity — this applies to spend as well. Scale agent investment the same way you scale the harness: measure output value at the current level, scale up only when that level plateaus, and ensure each increment of cost produces a measurable increment of value.*
 
 These are research questions, not blockers. The frameworks above won't provide answers, but they will keep you oriented while the answers emerge. Build with what works today; let the axioms guide your judgment where the evidence hasn't arrived yet.
+
+### 7.3 Epistemological Boundaries
+
+The three axioms are derived from observed structural contradictions, not from mathematical proof. They are the best available framework for the current state of practice — validated by convergent independent discovery (§7.1) and by the internal test that every spec obligation traces back to them (§2). But they are empirical conclusions, not formal axioms, and intellectual honesty requires acknowledging their boundaries.
+
+**The evidence base is young.** The convergent discoveries span roughly eighteen months (late 2024 to early 2026) and a small number of teams. Independent convergence is strong evidence, but it is not immune to shared blind spots — all teams operated in similar technological and economic conditions. As harness engineering is adopted in more diverse contexts, the principles may require refinement.
+
+**The contradictions are claimed to be permanent, but permanence is an empirical bet.** Each rests on an assumption about the structure of human-agent systems:
+
+- The intent-transfer contradiction assumes that human intent and agent execution differ in kind, not merely in degree. If a future system could genuinely share a human's contextual understanding — not approximate it with a larger context window — the nature of this contradiction would change.
+- The self-evaluation contradiction assumes that self-assessment is structurally biased. If a system could maintain genuine epistemic independence between its generative and evaluative processes — not a prompt-level separation, but a structural one — this contradiction would need re-examination.
+- The entropy contradiction assumes that pattern replication is inherently undirected. If a system could reliably distinguish patterns worth preserving from patterns worth retiring without external guidance, entropy management would shift from a harness responsibility to a model capability.
+
+None of these conditions appear close to being met. But stating them explicitly serves two purposes: it prevents the axioms from calcifying into dogma, and it gives future practitioners a principled basis for revision rather than ad hoc rejection.
+
+**The discipline loop is the slowest and least controlled.** The agent loop runs in minutes, the harness loop in weeks, the discipline loop in years. At the discipline level, controlled experiments are rare — the primary evidence is accumulating field experience. The discipline should therefore hold its own principles with calibrated confidence: firm enough to guide daily practice, provisional enough to update when sufficient counter-evidence accumulates. This is not a weakness unique to harness engineering — it is the epistemic condition of any engineering discipline in its formative period. The appropriate response is not doubt, but disciplined observation.

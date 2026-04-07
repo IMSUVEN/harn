@@ -8,6 +8,8 @@
 > - *The self-evaluation contradiction:* the same system that produces work cannot objectively evaluate that work. Self-serving bias is a property of self-evaluation itself.
 > - *The entropy contradiction:* pattern replication is simultaneously the agent's greatest strength and its greatest vulnerability.
 >
+> These contradictions are recursive: they act not only on the agent's work, but on the harness itself. The harness literalizes human intent into rules (intent transfer), its designers are biased judges of their own design (self-evaluation), and harness patterns self-replicate across projects (entropy). The axioms below therefore apply at two levels: to the agent operating within the harness, and to the harness operating within its context. (§4.3 addresses harness-level obligations; the companion [Harness Guide](HARNESS-GUIDE.md), §1, develops the full analysis.)
+>
 > The following axioms are principles for managing these contradictions.
 >
 > **Axiom 1. Humans steer, agents execute.**
@@ -288,6 +290,12 @@ Agent-generated code replicates existing patterns — including suboptimal ones.
 **SHOULD**: When a team conversation produces an architectural decision, capture it as a repository artifact. *Because: decisions made in chat are invisible to agents and to future team members. If it's not in the repo, it will be contradicted.*
 
 ### 4.3 Harness Evolution
+
+The three contradictions are recursive — they act on the harness itself (see preamble). The harness must therefore operate within its own feedback loop: constrain the agent, observe outcomes, adjust. This loop is slower than the agent loop (weeks, not minutes), but it requires the same properties: observable outcomes, honest measurement, and structural correction.
+
+**SHOULD**: Track observable harness health indicators on a regular cadence — not only after model upgrades. Useful indicators include: agent autonomous completion rate (tasks completed without human intervention), defect escape rate (issues found after the agent declared complete), and harness component trigger frequency (how often each rule fires — a rule that never triggers may be obsolete; a rule that triggers constantly may need redesign). The specific indicators are calibrated obligations; the practice of measurement is structural. *Because: a harness without health metrics is subject to the same invisible drift it prevents in codebases.*
+
+**SHOULD**: Evaluate harness changes against outcome data, not design intuition. When modifying the harness, compare agent output quality before and after using a consistent task set. *Because: the self-evaluation contradiction applies to harness designers. Outcome data is the harness equivalent of a structurally separate evaluator.*
 
 Every harness component encodes an assumption about model limitations. When a new model ships:
 
