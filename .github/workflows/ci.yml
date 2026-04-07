@@ -33,6 +33,33 @@ jobs:
       - name: Test
         run: cargo test
 
+  dogfood:
+    name: Dogfood
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: cargo build --release
+
+      - name: harn check
+        run: ./target/release/harn check --ci
+
+      - name: harn gc
+        run: |
+          output=$(./target/release/harn gc --json)
+          count=$(echo "$output" | jq length)
+          if [ "$count" -gt 0 ]; then
+            echo "::warning::harn gc found $count potentially stale documents"
+            echo "$output" | jq -r '.[].message'
+          fi
+
   release:
     name: Release
     needs: test
