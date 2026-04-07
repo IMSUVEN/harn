@@ -30,8 +30,12 @@ pub fn new_plan(project_root: &Path, description: &str, slug_override: Option<&s
         &format!("# ExecPlan: {description}"),
     );
 
-    fs::write(&filepath, content)
-        .with_context(|| format!("Could not write plan file: {}", filepath.display()))?;
+    fs::write(&filepath, content).with_context(|| {
+        format!(
+            "Could not write plan file: {}. Check filesystem permissions.",
+            filepath.display()
+        )
+    })?;
 
     println!();
     println!("Created: {ACTIVE_DIR}/{filename}");
@@ -113,7 +117,7 @@ pub fn complete_plan(project_root: &Path, name: &str) -> Result<()> {
 
     fs::rename(&source, &dest).with_context(|| {
         format!(
-            "Could not move plan from {} to {}",
+            "Could not move plan from {} to {}. Check filesystem permissions.",
             source.display(),
             dest.display()
         )
@@ -145,8 +149,12 @@ fn resolve_slug(
 
 fn ensure_dir(dir: &Path) -> Result<()> {
     if !dir.exists() {
-        fs::create_dir_all(dir)
-            .with_context(|| format!("Could not create directory: {}", dir.display()))?;
+        fs::create_dir_all(dir).with_context(|| {
+            format!(
+                "Could not create directory: {}. Check filesystem permissions.",
+                dir.display()
+            )
+        })?;
     }
     Ok(())
 }

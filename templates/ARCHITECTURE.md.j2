@@ -4,125 +4,53 @@
 
 <!-- TODO: Describe what this system does at a high level. 2-3 sentences. -->
 
-## Technology Stack
+## Crate Structure
 
-{% if stack == "rust" %}
-| Layer | Technology |
-|-------|-----------|
-| Language | Rust |
-| Build | Cargo |
-| Framework | TODO |
-{% elif stack == "node" %}
-| Layer | Technology |
-|-------|-----------|
-| Language | TypeScript / JavaScript |
-| Build | npm / pnpm |
-| Framework | TODO |
-{% elif stack == "python" %}
-| Layer | Technology |
-|-------|-----------|
-| Language | Python |
-| Build | pip / uv |
-| Framework | TODO |
-{% elif stack == "go" %}
-| Layer | Technology |
-|-------|-----------|
-| Language | Go |
-| Build | go build |
-| Framework | TODO |
-{% else %}
-| Layer | Technology |
-|-------|-----------|
-| Language | TODO |
-| Build | TODO |
-| Framework | TODO |
+<!-- TODO: Replace with your actual module/package tree.
+     Use a code block showing the directory structure with brief inline comments. -->
+
+```
+project/
+├── src/
+│   ├── main.rs          # Entry point
+│   └── ...              # Your modules
+└── tests/
+```
+
+## Module Dependency Rules
+
+Dependencies flow **downward only**. No module may import from a module above it.
+
+<!-- TODO: Replace with your actual dependency graph.
+     Use arrow notation to show allowed dependency directions. -->
+
+```
+entry_point
+  └── command_modules → shared_types, config
+```
+
+{% if stack == "rust" %}- Leaf modules (`types`, `config`) must not import from command modules.
+- Use `cargo clippy` to enforce boundaries.
+{% elif stack == "node" %}- Shared types live in a `types/` directory. Services do not import from routes.
+- Use ESLint import rules to enforce boundaries.
+{% elif stack == "python" %}- Domain modules must not import from entrypoints or adapters.
+- Use import linting to enforce boundaries.
+{% elif stack == "go" %}- Internal packages enforce boundaries naturally. `internal/types/` is a leaf.
+- Use `go vet` and import checks to enforce boundaries.
+{% else %}- Shared types are leaf dependencies — they must not import from feature modules.
+- Use linting tools to enforce boundaries.
 {% endif %}
 
-## Domain Map
+## Common Mistakes
 
-<!-- TODO: List the business domains of your project. Each domain is a logical unit
-     with its own responsibilities. Examples: "auth", "billing", "notifications". -->
+<!-- TODO: List the 3-4 things a newcomer is most likely to get wrong. -->
 
-| Domain | Description | Primary Path |
-|--------|-------------|-------------|
-| | | |
-
-## Layer Structure
-
-Code within each domain follows a fixed layer order. Dependencies flow forward only — no backward imports.
-
-{% if stack == "rust" %}
-```
-Types → Core → IO → CLI
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | Data structures, enums, error types (`src/types/` or per-module) |
-| Core | Business logic, domain rules, pure computation (no I/O) |
-| IO | File system, network, database — all side effects live here |
-| CLI | Argument parsing, subcommand dispatch, user-facing output |
-{% elif stack == "node" %}
-```
-Types → Service → Routes → Middleware
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | TypeScript interfaces, schemas, shared type definitions |
-| Service | Business logic, domain rules, database access |
-| Routes | HTTP handlers, request/response mapping |
-| Middleware | Auth, validation, error handling, logging |
-{% elif stack == "python" %}
-```
-Types → Domain → Adapters → Entrypoints
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | Data classes, Pydantic models, shared type definitions |
-| Domain | Business logic, domain rules, pure computation |
-| Adapters | Database, external APIs, file I/O |
-| Entrypoints | CLI commands, API endpoints, event handlers |
-{% elif stack == "go" %}
-```
-Types → Domain → Infra → Transport
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | Structs, interfaces, error types (`internal/types/`) |
-| Domain | Business logic, domain rules, pure computation |
-| Infra | Database, external services, file I/O |
-| Transport | HTTP handlers, gRPC, CLI commands |
-{% else %}
-```
-Types → Core → Integration → Interface
-```
-
-| Layer | Responsibility |
-|-------|---------------|
-| Types | Data structures, enums, error types, shared type definitions |
-| Core | Business logic, domain rules, pure computation |
-| Integration | External dependencies: databases, APIs, file I/O, network |
-| Interface | Entry points: API endpoints, CLI handlers, UI components |
-{% endif %}
-
-<!-- If this layering doesn't fit your project, adapt it. The key invariant is:
-     dependencies flow in ONE direction. No backward imports between layers. -->
+1. **TODO**: Describe the most common dependency direction violation.
+2. **TODO**: Describe a misplaced responsibility (e.g., logic in the wrong layer).
+3. **TODO**: Describe a type safety violation (e.g., using raw strings where typed wrappers exist).
 
 ## Cross-Cutting Concerns
 
-Shared capabilities that domains access through explicit interfaces:
-
-- **Error handling**: [TODO: your error strategy]
-- **Logging**: [TODO: structured logging approach]
-- **Configuration**: [TODO: centralized vs per-domain]
-
-## Key Decisions
-
-<!-- Record significant architectural decisions here, or link to docs/design-docs/. -->
-
-| Decision | Rationale | Date |
-|----------|-----------|------|
-| | | |
+- **Error handling**: <!-- TODO: your error strategy -->
+- **Logging**: <!-- TODO: structured logging approach -->
+- **Configuration**: <!-- TODO: centralized vs per-domain -->

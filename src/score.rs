@@ -95,7 +95,8 @@ pub fn update(project_root: &Path) -> Result<()> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)?;
     }
-    fs::write(&path, &content).with_context(|| format!("Could not write {SCORE_PATH}"))?;
+    fs::write(&path, &content)
+        .with_context(|| format!("Could not write {SCORE_PATH}. Check filesystem permissions."))?;
 
     println!("Updated: {SCORE_PATH}");
     println!();

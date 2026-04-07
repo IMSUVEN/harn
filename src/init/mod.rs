@@ -42,8 +42,6 @@ pub fn run(project_root: &Path, opts: InitOptions, verbose: bool) -> Result<()> 
         date: date.as_str().to_string(),
         harn_version: env!("CARGO_PKG_VERSION").to_string(),
         stack: opts.stack,
-        quick_start_build: default_build_cmd(opts.stack),
-        quick_start_test: default_test_cmd(opts.stack),
     };
 
     let files = if let Some(ref tpl_dir) = opts.template_dir {
@@ -68,8 +66,12 @@ pub fn run(project_root: &Path, opts: InitOptions, verbose: bool) -> Result<()> 
     for dir in &dirs {
         let full = project_root.join(dir);
         if !full.exists() {
-            fs::create_dir_all(&full)
-                .with_context(|| format!("Could not create directory: {}", full.display()))?;
+            fs::create_dir_all(&full).with_context(|| {
+                format!(
+                    "Could not create directory: {}. Check filesystem permissions.",
+                    full.display()
+                )
+            })?;
         }
     }
 
@@ -92,8 +94,12 @@ pub fn run(project_root: &Path, opts: InitOptions, verbose: bool) -> Result<()> 
 
         if let Some(parent) = full.parent() {
             if !parent.exists() {
-                fs::create_dir_all(parent)
-                    .with_context(|| format!("Could not create directory: {}", parent.display()))?;
+                fs::create_dir_all(parent).with_context(|| {
+                    format!(
+                        "Could not create directory: {}. Check filesystem permissions.",
+                        parent.display()
+                    )
+                })?;
             }
         }
 
@@ -307,26 +313,6 @@ fn print_next_steps() {
     println!("  2. Edit ARCHITECTURE.md — define domain structure and layer rules");
     println!("  3. Review docs/evaluation/criteria.md — adjust quality criteria");
     println!("  4. Run `harn check` to validate structural integrity");
-}
-
-fn default_build_cmd(stack: Stack) -> String {
-    match stack {
-        Stack::Rust => "cargo build".to_string(),
-        Stack::Node => "npm install && npm run build".to_string(),
-        Stack::Python => "pip install -e .".to_string(),
-        Stack::Go => "go build ./...".to_string(),
-        Stack::Generic => "# build".to_string(),
-    }
-}
-
-fn default_test_cmd(stack: Stack) -> String {
-    match stack {
-        Stack::Rust => "cargo test  # target ≤60 seconds".to_string(),
-        Stack::Node => "npm test  # target ≤60 seconds".to_string(),
-        Stack::Python => "pytest  # target ≤60 seconds".to_string(),
-        Stack::Go => "go test ./...  # target ≤60 seconds".to_string(),
-        Stack::Generic => "# test — target ≤60 seconds".to_string(),
-    }
 }
 
 pub fn sha256_hex(content: &str) -> String {

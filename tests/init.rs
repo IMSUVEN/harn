@@ -50,8 +50,8 @@ fn init_architecture_is_stack_aware() {
     project.run_harn(&["init", "--tools", "codex", "--stack", "rust"]);
 
     let content = project.read_file("ARCHITECTURE.md");
-    assert!(content.contains("Rust"));
-    assert!(content.contains("Types → Core → IO → CLI"));
+    assert!(content.contains("cargo clippy"));
+    assert!(content.contains("Common Mistakes"));
 }
 
 #[test]
@@ -108,7 +108,7 @@ fn init_detects_rust_stack() {
     assert!(config.contains("stack = \"rust\""));
 
     let arch = project.read_file("ARCHITECTURE.md");
-    assert!(arch.contains("Rust"));
+    assert!(arch.contains("cargo clippy"));
 }
 
 #[test]

@@ -49,6 +49,9 @@ pub fn run(project_root: &Path, fix: bool, ci: bool) -> Result<i32> {
     check_content_substantive(project_root, &config, &mut results);
     check_template_customization(project_root, &config, &mut results);
     check_cross_references(project_root, &mut results);
+    check_agents_length(project_root, &mut results);
+    check_arch_dependency_direction(project_root, &mut results);
+    check_quality_score_exists(project_root, &mut results);
 
     let report = CheckReport { results };
 
@@ -201,6 +204,56 @@ fn extract_md_links(line: &str) -> Vec<String> {
         }
     }
     links
+}
+
+const AGENTS_LINE_LIMIT: usize = 150;
+
+fn check_agents_length(root: &Path, results: &mut Vec<CheckResult>) {
+    let path = root.join("AGENTS.md");
+    if let Ok(content) = fs::read_to_string(&path) {
+        let line_count = content.lines().count();
+        if line_count > AGENTS_LINE_LIMIT {
+            results.push(CheckResult {
+                path: "AGENTS.md".to_string(),
+                message: format!(
+                    "AGENTS.md is {line_count} lines (recommended ≤{AGENTS_LINE_LIMIT}). \
+                     Consider moving detailed content to linked documents."
+                ),
+                severity: Severity::Warning,
+            });
+        }
+    }
+}
+
+fn check_arch_dependency_direction(root: &Path, results: &mut Vec<CheckResult>) {
+    let path = root.join("ARCHITECTURE.md");
+    if let Ok(content) = fs::read_to_string(&path) {
+        let lower = content.to_lowercase();
+        let has_direction = lower.contains("dependency")
+            || lower.contains("dependencies flow")
+            || lower.contains("downward only")
+            || lower.contains("one direction");
+        if !has_direction {
+            results.push(CheckResult {
+                path: "ARCHITECTURE.md".to_string(),
+                message: "ARCHITECTURE.md does not mention dependency direction. \
+                         Add a statement about which way dependencies flow."
+                    .to_string(),
+                severity: Severity::Warning,
+            });
+        }
+    }
+}
+
+fn check_quality_score_exists(root: &Path, results: &mut Vec<CheckResult>) {
+    let path = root.join("docs/QUALITY_SCORE.md");
+    if !path.exists() {
+        results.push(CheckResult {
+            path: "docs/QUALITY_SCORE.md".to_string(),
+            message: "No quality score found. Run `harn score update` to create one.".to_string(),
+            severity: Severity::Warning,
+        });
+    }
 }
 
 fn print_report(root: &Path, report: &CheckReport) {

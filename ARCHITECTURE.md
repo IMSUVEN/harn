@@ -64,3 +64,10 @@ main.rs
 - `types.rs` defines the newtype vocabulary (`Slug`, `ProjectName`, `HarnDate`, `HarnPath`, `Stack`, `AiTool`). Used across all modules.
 - `detect.rs` is used only by `init/`. No other module should call detection logic.
 - `templates/` is a compile-time asset directory, not a runtime module. Accessed via `include_dir!` in `init/render.rs`.
+
+## Common Mistakes
+
+1. **Importing `config.rs` types in `cli.rs` dispatch logic.** Config belongs to command modules. `cli.rs` should only parse arguments and call command functions — never read or interpret config values directly.
+2. **Adding detection logic outside `detect.rs` / `init/`.** All environment-sensing code (git detection, stack detection, AI tool detection) belongs in `detect.rs`. Other modules should receive detection results as parameters.
+3. **Using raw `String` where a newtype exists.** If a value has domain meaning (slugs, project names, dates, paths, stacks, AI tools), use the corresponding type from `types.rs`. Raw strings bypass validation.
+4. **Calling `std::process::exit()` in command modules.** Return `Result<()>` and let errors propagate to `main()`. Only `main.rs` should determine exit codes.

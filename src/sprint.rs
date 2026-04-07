@@ -72,8 +72,12 @@ pub fn new_sprint(
         &format!("# Sprint Contract: {description}"),
     );
 
-    fs::write(&full_path, content)
-        .with_context(|| format!("Could not write sprint contract: {}", full_path.display()))?;
+    fs::write(&full_path, content).with_context(|| {
+        format!(
+            "Could not write sprint contract: {}. Check filesystem permissions.",
+            full_path.display()
+        )
+    })?;
 
     let state = SprintState {
         name: description.to_string(),
@@ -169,7 +173,7 @@ pub fn sprint_done(project_root: &Path) -> Result<()> {
     if source.exists() {
         fs::rename(&source, &dest).with_context(|| {
             format!(
-                "Could not move sprint contract from {} to {}",
+                "Could not move sprint contract from {} to {}. Check filesystem permissions.",
                 source.display(),
                 dest.display()
             )
@@ -178,8 +182,12 @@ pub fn sprint_done(project_root: &Path) -> Result<()> {
 
     // Remove sprint state
     let state_path = project_root.join(SPRINT_STATE);
-    fs::remove_file(&state_path)
-        .with_context(|| format!("Could not remove sprint state: {}", state_path.display()))?;
+    fs::remove_file(&state_path).with_context(|| {
+        format!(
+            "Could not remove sprint state: {}. Check filesystem permissions.",
+            state_path.display()
+        )
+    })?;
 
     println!();
     println!("Sprint \"{}\" completed.", state.name);
@@ -244,8 +252,13 @@ fn load_sprint_state(project_root: &Path) -> Result<SprintState> {
             path.display()
         )
     })?;
-    let state: SprintState = toml::from_str(&content)
-        .with_context(|| format!("Invalid sprint state at {}", path.display()))?;
+    let state: SprintState = toml::from_str(&content).with_context(|| {
+        format!(
+            "Invalid sprint state at {}.\n\
+             Fix the TOML syntax or delete the file and run `harn sprint new`.",
+            path.display()
+        )
+    })?;
     Ok(state)
 }
 

@@ -21,7 +21,8 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for crate structure, module boundaries, a
 2. **Know the quality bar.** Read [`docs/evaluation/criteria.md`](docs/evaluation/criteria.md). Target grade B or above.
 3. **Respect the architecture.** Modules have strict dependency direction — see [ARCHITECTURE.md](ARCHITECTURE.md). CLI parses and dispatches; domain modules never depend on CLI types.
 4. **Validate before handing off.** Run `cargo test && cargo clippy -- -D warnings && cargo fmt --check`. Fix any failures before declaring work complete.
-5. **Record decisions.** Non-obvious choices go in the execution plan's Decision Log or in [`docs/design-docs/`](docs/design-docs/).
+5. **Update docs with code.** When changing code mapped in `.agents/harn/config.toml` `[[gc.mappings]]`, update the corresponding documentation in the same change. CI runs `harn check --ci` and `harn gc` to enforce this.
+6. **Record decisions.** Non-obvious choices go in the execution plan's Decision Log or in [`docs/design-docs/`](docs/design-docs/).
 
 ## Key Constraints
 
@@ -31,6 +32,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for crate structure, module boundaries, a
 - **Offline-first.** Core operations (`init`, `check`, `plan`, `sprint`, `status`) must not require network access.
 - **Templates are embedded.** All templates compile into the binary via `include_dir!`. The `--template-dir` flag is the escape hatch.
 - **Test speed.** Test suite must stay under 60 seconds. Use temp directories, not real filesystem fixtures that accumulate.
+- **Stop on ambiguity.** When encountering destructive operations, unclear requirements, or security-sensitive changes, report what you found and wait for guidance rather than proceeding.
 
 ## Documentation Map
 

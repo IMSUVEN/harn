@@ -15,8 +15,6 @@ pub struct RenderContext {
     pub date: String,
     pub harn_version: String,
     pub stack: Stack,
-    pub quick_start_build: String,
-    pub quick_start_test: String,
 }
 
 impl RenderContext {
@@ -27,8 +25,6 @@ impl RenderContext {
             date => self.date,
             harn_version => self.harn_version,
             stack => self.stack.as_str(),
-            quick_start_build => self.quick_start_build,
-            quick_start_test => self.quick_start_test,
         }
     }
 }
@@ -87,17 +83,23 @@ pub fn render_all(ctx: &RenderContext) -> Result<Vec<RenderedFile>> {
     for (template_path, output_path) in &manifest {
         let file = TEMPLATES_DIR
             .get_file(template_path)
-            .with_context(|| format!("Embedded template not found: {template_path}"))?;
+            .with_context(|| format!("Embedded template not found: {template_path}. This is a bug — please report it at https://github.com/imsuven/harn/issues."))?;
         let source = file
             .contents_utf8()
-            .with_context(|| format!("Template is not valid UTF-8: {template_path}"))?;
+            .with_context(|| format!("Template is not valid UTF-8: {template_path}. This is a bug — please report it at https://github.com/imsuven/harn/issues."))?;
 
         let content = if template_path.ends_with(".j2") {
-            env.add_template(template_path, source)
-                .with_context(|| format!("Failed to parse template: {template_path}"))?;
+            env.add_template(template_path, source).with_context(|| {
+                format!(
+                    "Failed to parse template: {template_path}. This is a bug — please report it."
+                )
+            })?;
             let tmpl = env.get_template(template_path)?;
-            tmpl.render(&jinja_ctx)
-                .with_context(|| format!("Failed to render template: {template_path}"))?
+            tmpl.render(&jinja_ctx).with_context(|| {
+                format!(
+                    "Failed to render template: {template_path}. This is a bug — please report it."
+                )
+            })?
         } else {
             source.to_string()
         };
@@ -129,10 +131,14 @@ pub fn render_all_from_dir(template_dir: &Path, ctx: &RenderContext) -> Result<V
         let content = if template_path.ends_with(".j2") {
             let mut env = Environment::new();
             env.add_template(template_path, &source)
-                .with_context(|| format!("Failed to parse template: {}", full_path.display()))?;
+                .with_context(|| format!("Failed to parse template: {}. Check the Jinja2 syntax in your custom template.", full_path.display()))?;
             let tmpl = env.get_template(template_path)?;
-            tmpl.render(&jinja_ctx)
-                .with_context(|| format!("Failed to render template: {}", full_path.display()))?
+            tmpl.render(&jinja_ctx).with_context(|| {
+                format!(
+                    "Failed to render template: {}. Check template variable references.",
+                    full_path.display()
+                )
+            })?
         } else {
             source
         };
@@ -188,8 +194,6 @@ mod tests {
             date: "2026-04-03".to_string(),
             harn_version: "0.1.0".to_string(),
             stack,
-            quick_start_build: "cargo build".to_string(),
-            quick_start_test: "cargo test".to_string(),
         }
     }
 
@@ -220,8 +224,8 @@ mod tests {
             .iter()
             .find(|f| f.rel_path == "ARCHITECTURE.md")
             .unwrap();
-        assert!(arch.content.contains("Rust"));
-        assert!(arch.content.contains("Types → Core → IO → CLI"));
+        assert!(arch.content.contains("cargo clippy"));
+        assert!(arch.content.contains("Common Mistakes"));
 
         let criteria = files
             .iter()
@@ -240,10 +244,8 @@ mod tests {
             .iter()
             .find(|f| f.rel_path == "ARCHITECTURE.md")
             .unwrap();
-        assert!(arch.content.contains("TypeScript / JavaScript"));
-        assert!(arch
-            .content
-            .contains("Types → Service → Routes → Middleware"));
+        assert!(arch.content.contains("ESLint"));
+        assert!(arch.content.contains("Common Mistakes"));
 
         let criteria = files
             .iter()
@@ -262,10 +264,8 @@ mod tests {
             .iter()
             .find(|f| f.rel_path == "ARCHITECTURE.md")
             .unwrap();
-        assert!(arch.content.contains("Python"));
-        assert!(arch
-            .content
-            .contains("Types → Domain → Adapters → Entrypoints"));
+        assert!(arch.content.contains("import linting"));
+        assert!(arch.content.contains("Common Mistakes"));
     }
 
     #[test]
@@ -277,8 +277,8 @@ mod tests {
             .iter()
             .find(|f| f.rel_path == "ARCHITECTURE.md")
             .unwrap();
-        assert!(arch.content.contains("Go"));
-        assert!(arch.content.contains("Types → Domain → Infra → Transport"));
+        assert!(arch.content.contains("go vet"));
+        assert!(arch.content.contains("Common Mistakes"));
     }
 
     #[test]
@@ -290,9 +290,8 @@ mod tests {
             .iter()
             .find(|f| f.rel_path == "ARCHITECTURE.md")
             .unwrap();
-        assert!(arch
-            .content
-            .contains("Types → Core → Integration → Interface"));
+        assert!(arch.content.contains("linting tools"));
+        assert!(arch.content.contains("Common Mistakes"));
     }
 
     #[test]

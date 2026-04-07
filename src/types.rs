@@ -15,17 +15,17 @@ impl Slug {
     pub fn from_explicit(raw: &str) -> Result<Self> {
         let s = raw.trim().to_lowercase();
         if s.is_empty() {
-            bail!("Slug cannot be empty");
+            bail!("Slug cannot be empty. Provide a non-empty value with --slug.");
         }
         if !s
             .chars()
             .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
         {
-            bail!("Slug must contain only lowercase ASCII letters, digits, and hyphens: {raw}");
+            bail!("Slug must contain only lowercase ASCII letters, digits, and hyphens: {raw}. Use --slug with a valid value (e.g., --slug my-feature).");
         }
         let s = s.trim_matches('-').to_string();
         if s.is_empty() {
-            bail!("Slug cannot be only hyphens");
+            bail!("Slug cannot be only hyphens. Provide a slug with at least one letter or digit.");
         }
         Ok(Self(s))
     }
@@ -76,7 +76,8 @@ impl Slug {
             drop(pattern);
         }
         bail!(
-            "Could not generate sequential slug after 999 attempts in {}",
+            "Could not generate sequential slug after 999 attempts in {}.\n\
+             Clean up old plans/sprints or use --slug to specify a custom slug.",
             dir.display()
         );
     }
@@ -101,7 +102,7 @@ impl ProjectName {
     pub fn new(name: impl Into<String>) -> Result<Self> {
         let name = name.into();
         if name.trim().is_empty() {
-            bail!("Project name cannot be empty");
+            bail!("Project name cannot be empty. Use --name to specify a project name.");
         }
         Ok(Self(name.trim().to_string()))
     }

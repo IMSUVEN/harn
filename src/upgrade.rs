@@ -17,8 +17,6 @@ pub fn run(project_root: &Path, dry_run: bool) -> Result<()> {
         date: config.project.created.clone(),
         harn_version: env!("CARGO_PKG_VERSION").to_string(),
         stack: config.init.stack,
-        quick_start_build: default_build_cmd(config.init.stack),
-        quick_start_test: default_test_cmd(config.init.stack),
     };
 
     let new_files = render::render_all(&ctx)?;
@@ -108,8 +106,9 @@ pub fn run(project_root: &Path, dry_run: bool) -> Result<()> {
                     );
                 } else {
                     let sidecar = format!("{}.harn-upgrade", full_path.display());
-                    fs::write(&sidecar, &file.content)
-                        .with_context(|| format!("Could not write sidecar: {sidecar}"))?;
+                    fs::write(&sidecar, &file.content).with_context(|| {
+                        format!("Could not write sidecar: {sidecar}. Check filesystem permissions.")
+                    })?;
                     println!(
                         "  {} {} (modified — sidecar created)",
                         style("sidecar").yellow(),
@@ -167,24 +166,4 @@ fn sha256_hex(content: &str) -> String {
     let mut hasher = Sha256::new();
     hasher.update(content.as_bytes());
     format!("{:x}", hasher.finalize())
-}
-
-fn default_build_cmd(stack: crate::types::Stack) -> String {
-    match stack {
-        crate::types::Stack::Rust => "cargo build".to_string(),
-        crate::types::Stack::Node => "npm install && npm run build".to_string(),
-        crate::types::Stack::Python => "pip install -e .".to_string(),
-        crate::types::Stack::Go => "go build ./...".to_string(),
-        crate::types::Stack::Generic => "# build".to_string(),
-    }
-}
-
-fn default_test_cmd(stack: crate::types::Stack) -> String {
-    match stack {
-        crate::types::Stack::Rust => "cargo test  # target ≤60 seconds".to_string(),
-        crate::types::Stack::Node => "npm test  # target ≤60 seconds".to_string(),
-        crate::types::Stack::Python => "pytest  # target ≤60 seconds".to_string(),
-        crate::types::Stack::Go => "go test ./...  # target ≤60 seconds".to_string(),
-        crate::types::Stack::Generic => "# test — target ≤60 seconds".to_string(),
-    }
 }
