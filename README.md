@@ -22,7 +22,7 @@ Three documents define the theory and vision:
 
 | Document | Purpose |
 |---|---|
-| [Product Philosophy](docs/PHILOSOPHY.md) | anima's stance: cultivation over control, seeds over templates |
+| [Product Philosophy](docs/PHILOSOPHY.md) | anima's stance: cultivation over control, seeds over templates, the spirit |
 | [Harness Specification](docs/HARNESS-SPEC.md) | The discipline: what to build, with obligation levels |
 | [Harness Guide](docs/HARNESS-GUIDE.md) | The reasoning: how to think about harness design |
 

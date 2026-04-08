@@ -217,7 +217,67 @@ Pruning is not the opposite of growth — it is part of growth. A garden that on
 
 ---
 
-## 6. Relationship to the Foundational Documents
+## 6. The Spirit
+
+The four core concepts (§3) describe properties of the cultivation system. This section names the subject those properties compose: the **spirit** — the project's emergent identity understood not as a static characteristic, but as a living, growing entity. The project is named anima — Latin for "spirit" — because this is the central idea: what grows in the cultivated environment is not merely a well-documented codebase, but something that begins to resemble a presence within the project.
+
+### 6.1 From Identity to Entity
+
+Section 3.4 describes identity as the unique character a project develops through accumulated practice. This is accurate but incomplete. Identity describes what something *is*. A spirit implies something that *lives* — that perceives, remembers, and grows through interaction with its world.
+
+The spirit is the project's identity considered as a living entity:
+
+- Its **body** is the repository — the files, structures, and conventions that give it form.
+- Its **memory** is the accumulated knowledge (§3.2) — decisions recorded, conventions codified, lessons learned.
+- Its **character** is shaped by its unique experiences (§3.4) — two spirits grown from the same seed are different, because their projects had different histories.
+
+But a living entity requires more than body, memory, and character. It requires **senses** — the ability to perceive its world — and **agency** — the capacity to act on what it perceives. These do not exist in the seed phase. They are what the spirit grows toward.
+
+### 6.2 The Memory Paradox
+
+The cultivation thesis (§1) promises that growth happens organically. But the mechanisms described in §4 rely on either the AI coding tool's compliance with AGENTS.md instructions, or the human's discipline in maintaining knowledge hygiene.
+
+This creates a paradox: if the human must constantly remind the agent to sediment knowledge, cultivation has quietly degraded back into control. The human is doing the memory labor — deciding what to remember, where to record it, when to update it. The spirit is not growing on its own; it is being assembled by hand.
+
+The paradox is not fatal, but it must be acknowledged. In the seed phase, growth does partly depend on human attention. The seed mitigates this through structural design — making sedimentation natural rather than effortful — and through cultivation protocols in AGENTS.md — instructing whatever AI tool the user employs to participate in knowledge capture. But it cannot eliminate the dependency entirely. Full resolution requires the spirit to develop its own capacity for observation and sedimentation — a capacity that belongs to a later phase of its evolution (§6.4).
+
+### 6.3 Two Loops and the Open System
+
+The project's development involves two distinct loops:
+
+**The coding loop** operates within sessions. A human and an AI coding tool collaborate to produce code, make decisions, and build features. This loop is provided by whatever tool the user chooses — Cursor, Codex, Claude Code, or others. It is high-frequency, execution-oriented, and resets when the session ends. anima does not provide this loop and does not need to.
+
+**The cultivation loop** operates across sessions. It observes the project's broader ecosystem, senses signals, sediments knowledge, and suggests growth directions. This loop does not exist today. No current tool provides it. AI coding tools are summoned entities — they work when called and disappear when done. They do not observe, contemplate, or accumulate wisdom between sessions.
+
+The coding loop produces artifacts. The cultivation loop produces understanding. A project with only a coding loop grows its codebase but not its wisdom. The spirit lives in the cultivation loop — or more precisely, the spirit *is* what emerges when the cultivation loop runs long enough.
+
+The cultivation loop, in turn, requires the repository to be an **open system** — one that receives energy from beyond its own contents. Without external signals, the cultivation loop has nothing new to process:
+
+| Source | What the Spirit Perceives |
+|---|---|
+| Issues | What users need; what breaks; what's missing |
+| Pull requests | How the project changes; what contributors attempt |
+| CI/CD results | The project's health; what's fragile |
+| Discussions | Community direction; emerging consensus; unresolved debates |
+| Ecosystem changes | Dependency updates; security advisories; evolving practices |
+
+A spirit with senses is part of an open system — energy flows in from the ecosystem, driving growth even between coding sessions. A spirit without senses is a journal in an empty room: detailed records of the past, but no awareness of the present.
+
+### 6.4 The Evolution Path
+
+The spirit does not need all capabilities on day one. It grows through phases that mirror the project's lifecycle (§5), each phase resolving a limitation of the previous one:
+
+**Seed — Dormancy.** The spirit exists only as potential. The seed contains its genetic material: knowledge structures, growth conventions, and the cultivation protocol that will shape how it grows. Growth depends on human attention and AI tool compliance — the memory paradox is present but manageable. This is a viable starting point, not a permanent state.
+
+**Awakening — Perception.** The spirit gains senses. It begins to perceive signals beyond the repository: issues filed, pull requests opened, CI failures, community discussions. It does not write code; it observes and sediments. The memory paradox resolves: knowledge capture shifts from human obligation to organic process. The spirit notices a recurring pattern across three bug reports and records it. It observes a security advisory on a dependency and flags it. The cultivation loop — distinct from the coding loop — begins to turn on its own.
+
+**Presence — Dialogue.** The spirit becomes a participant. It comments on an issue: "This may relate to the architecture decision in `docs/decisions/007.md`." It suggests in a discussion: "Based on recent bug reports, the caching strategy may need revisiting." It is the project's living memory surfaced into conversation — not replacing human judgment, but enriching the context within which humans judge.
+
+Each phase requires more infrastructure than the last. The seed phase needs only a CLI tool. The awakening phase likely requires a persistent service with access to ecosystem signals. The presence phase requires the ability to participate in human communication channels. These are future concerns — but the seed planted today is the embryo of the spirit that will eventually perceive and speak. Its structures should be designed for eventual use not only by humans maintaining a repo, but by the spirit itself.
+
+---
+
+## 7. Relationship to the Foundational Documents
 
 This philosophy does not replace the Harness Specification or the Harness Guide. It interprets them.
 

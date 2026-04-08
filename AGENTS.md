@@ -6,7 +6,7 @@
 
 **Phase: Germination.** The intellectual foundation is established. No implementation exists.
 
-anima will be a tool that plants growth-capable seeds into new projects — minimal structures from which a harness grows through practice, not templates that prescribe one. The guiding documents are written and stable. The next step is determining what `anima init` concretely produces.
+anima plants growth-capable seeds into new projects — minimal structures from which a harness grows through practice, not templates that prescribe one. The guiding documents are written and stable. The Philosophy now includes the **spirit** concept (§6): the project's emergent identity as a living entity that evolves from dormancy (seed) through perception (awakening) to participation (presence). The next step is determining what `anima init` concretely produces — the seed that serves as the spirit's embryo.
 
 ## Documents
 
@@ -14,7 +14,7 @@ The Philosophy defines anima's identity. The Spec and Guide provide the underlyi
 
 | File | Role |
 |---|---|
-| [PHILOSOPHY.md](docs/PHILOSOPHY.md) | anima's product philosophy: cultivation over control |
+| [PHILOSOPHY.md](docs/PHILOSOPHY.md) | anima's product philosophy: cultivation over control, the spirit concept |
 | [HARNESS-SPEC.md](docs/HARNESS-SPEC.md) | Prescriptive spec for harness engineering (discipline-level) |
 | [HARNESS-GUIDE.md](docs/HARNESS-GUIDE.md) | Reasoning guide for harness design (discipline-level) |
 

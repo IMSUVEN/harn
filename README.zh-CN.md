@@ -22,7 +22,7 @@ anima 将成为一种工具，向新项目植入 **种子**——极简结构，
 
 | 文档 | 用途 |
 |---|---|
-| [产品哲学](docs/PHILOSOPHY.zh-CN.md) | anima 的立场：培育优先于控制，种子优先于模板 |
+| [产品哲学](docs/PHILOSOPHY.zh-CN.md) | anima 的立场：培育优先于控制，种子优先于模板，精灵 |
 | [Harness 规范](docs/HARNESS-SPEC.zh-CN.md) | 学科之维：当建何物，以及义务层级 |
 | [Harness 指南](docs/HARNESS-GUIDE.zh-CN.md) | 推理之维：如何思考 harness 设计 |
 
