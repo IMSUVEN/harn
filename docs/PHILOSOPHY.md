@@ -169,6 +169,10 @@ A seed generates the **minimal structure needed for a harness to grow from pract
 
 The seed trusts that the right rules will emerge from practice — because the user and agent will discover them together — and provides the mechanisms for those rules to be captured and enforced once discovered.
 
+### The concrete seed
+
+The seed design lives in `seed/` in this repository. It produces three files: an `AGENTS.md` with a cultivation protocol (the spirit's behavioral DNA), a `docs/decisions/` directory with a recording convention (the spirit's memory structure), and an empty `docs/ARCHITECTURE.md` (the spirit's future self-image). The cultivation protocol — four directives for how the AI coding tool should participate in knowledge sedimentation — is the seed's most critical innovation, directly addressing the memory paradox (§6.2).
+
 ---
 
 ## 5. The Growth Lifecycle
