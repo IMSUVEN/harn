@@ -1,35 +1,32 @@
-# harn
+# anima
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-帮助人们驾驭 AI Agent——而不止于使用它们。
+种下种子，而非模板。培育智能体，勿以配置代之。
 
-## 问题所在
+## 核心理念
 
-如今多数工程师把 AI Agent 当作更快的打字员：提问、收代码、粘贴。一时可行——直到不再可行：Agent 偏离意图、复刻不良模式、笃定地写出坏代码，人花在调试其输出上的时间，反而超过了生成代码所省下的时间。
+AI 辅助工程中的瓶颈不在模型，而在环境。
 
-瓶颈从来不在模型，而在环境。
+应对之道，多见诸控制：约束智能体、防其失误、以精密规则配置。此举有效——却往往会催生出标准化、脆弱、与所服项目彼此脱节的 harness。
 
-## 何谓 Harness 工程
+anima 立足另一前提：**智能体是尚待涵养的初生协作者，而非须严加防范的危险工具。** harness 不是囚笼——而是土、光与水。合宜的规则不出自模板；它们从项目自身的实践中涌现。每一次将失误升格为 linter 规则，每一次记下决断，每一次从实践中发现约定——这些都不是维护琐事。它们是生长。
 
-**harness** 是围绕模型的一切：为 Agent 指明方向的项目结构、约束其猜测的类型系统、闭合反馈环的测试、防止损害的安全边界，以及在 Agent 陷入困境时将其拉回正轨的升级协议。
+anima 将成为一种工具，向新项目植入 **种子**——极简结构，使人机协作之下 harness 有机生长。不是面向特定技术栈的固定配置，而是适用于任何项目的生长机制。
 
-**Harness 工程** 是有意设计这些环境的学科——使 Agent 的力量*为你所用*，而非*与你为敌*。
+## 项目阶段：萌发
 
-这并非新见。2024 年末至 2026 年初，[OpenAI](https://openai.com/index/harness-engineering/)、[Anthropic](https://www.anthropic.com/engineering/harness-design-long-running-apps) 与多位独立实践者殊途同归，得出了惊人相似的结论——并非事先协调，而是问题结构本身只留下一窄条可行解。
+思想根基已立。尚无实现。
 
-## harn 将是什么
+三份文档界定理论与愿景：
 
-`harn` 旨在让 Harness 工程变得可及。手工搭好合适的环境——可被发现的知识、架构约束、反馈环、工作流产物——既繁琐又难以一贯；`harn` 想要改变这一点。
+| 文档 | 用途 |
+|---|---|
+| [产品哲学](docs/PHILOSOPHY.zh-CN.md) | anima 的立场：培育优先于控制，种子优先于模板 |
+| [Harness 规范](docs/HARNESS-SPEC.zh-CN.md) | 学科之维：当建何物，以及义务层级 |
+| [Harness 指南](docs/HARNESS-GUIDE.zh-CN.md) | 推理之维：如何思考 harness 设计 |
 
-项目的最终形态刻意未定。指导原则已然清晰；产品形态将随之成形。
-
-## 指导性文档
-
-设计植根于正式规范与配套指南。二者共同确立人机协同系统的三重结构矛盾、应对它们的三条公理，以及渐进采纳的成熟度模型（Level 1–3）。
-
-- [Harness 规范](docs/HARNESS-SPEC.zh-CN.md)——harness 是什么，其组成、义务与生命周期
-- [Harness 指南](docs/HARNESS-GUIDE.zh-CN.md)——如何思考 harness 设计：理据、示例与决策框架
+anima 扎根于 [harness engineering](https://openai.com/index/harness-engineering/)——2024 至 2026 年间，[OpenAI](https://openai.com/index/harness-engineering/)、[Anthropic](https://www.anthropic.com/engineering/harness-design-long-running-apps) 与独立实践者关于「何以使 AI 编程智能体奏效」的汇聚性发现。规范与指南阐述这门学科；哲学则以 anima 的培育视角对其再诠释。
 
 ## 许可
 

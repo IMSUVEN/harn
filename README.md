@@ -1,35 +1,32 @@
-# harn
+# anima
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-Help humans harness AI agents — not just use them.
+Plant seeds, not templates. Cultivate agents, don't configure them.
 
-## The Problem
+## The Belief
 
-Most engineers today use AI agents as faster typists. They prompt, they get code, they paste it in. This works — until it doesn't. The agent drifts from intent, replicates bad patterns, confidently produces broken code, and the human spends more time debugging the output than they saved generating it.
+The bottleneck in AI-assisted engineering is not the model. It's the environment.
 
-The bottleneck was never the model. It's the environment.
+Most approaches to this problem reach for control: constrain the agent, guard against its mistakes, configure it with precise rules. This works — but it produces harnesses that are standardized, brittle, and disconnected from the projects they serve.
 
-## What Harness Engineering Is
+anima starts from a different premise: **the agent is a nascent collaborator, not a dangerous tool.** The harness is not a cage — it's soil, light, and water. The right rules don't come from a template; they emerge from the project's own practice. Each mistake promoted to a linter rule, each decision recorded, each convention discovered — these are not maintenance tasks. They are growth.
 
-A **harness** is everything around the model: the project structure that orients the agent, the type system that constrains its guesses, the tests that close the feedback loop, the safety boundaries that prevent damage, and the escalation protocols that pull it back when it's stuck.
+anima will be a tool that plants **seeds** into new projects — minimal structures from which a harness grows organically through human-agent collaboration. Not fixed configurations for a specific stack, but growth mechanisms that work for any project.
 
-**Harness engineering** is the discipline of designing these environments deliberately — so the agent's power works *for* you instead of *against* you.
+## Project Phase: Germination
 
-This isn't a new idea. Between late 2024 and early 2026, [OpenAI](https://openai.com/index/harness-engineering/), [Anthropic](https://www.anthropic.com/engineering/harness-design-long-running-apps), and several independent practitioners converged on remarkably similar conclusions — not by coordination, but because the problem structure admits only a narrow band of workable solutions.
+The intellectual foundation is established. No implementation exists yet.
 
-## What harn Will Be
+Three documents define the theory and vision:
 
-`harn` is a project to make harness engineering accessible. Setting up the right environment — discoverable knowledge, architectural constraints, feedback loops, workflow artifacts — is tedious and inconsistent when done by hand. `harn` aims to change that.
+| Document | Purpose |
+|---|---|
+| [Product Philosophy](docs/PHILOSOPHY.md) | anima's stance: cultivation over control, seeds over templates |
+| [Harness Specification](docs/HARNESS-SPEC.md) | The discipline: what to build, with obligation levels |
+| [Harness Guide](docs/HARNESS-GUIDE.md) | The reasoning: how to think about harness design |
 
-The project's final form is deliberately undecided. The guiding principles are clear; the product shape will follow.
-
-## Guiding Documents
-
-The design is grounded in a formal specification and a companion guide. Together they establish three structural contradictions of human-agent systems, three axioms for managing them, and a maturity model (Level 1–3) for progressive adoption.
-
-- [Harness Specification](docs/HARNESS-SPEC.md) — what a harness is, its components, obligations, and lifecycle
-- [Harness Guide](docs/HARNESS-GUIDE.md) — how to think about harness design: rationale, examples, and decision frameworks
+anima is rooted in [harness engineering](https://openai.com/index/harness-engineering/) — the convergent discoveries of [OpenAI](https://openai.com/index/harness-engineering/), [Anthropic](https://www.anthropic.com/engineering/harness-design-long-running-apps), and independent practitioners between 2024–2026 about what makes AI coding agents effective. The spec and guide describe this discipline. The philosophy reinterprets it through anima's cultivation lens.
 
 ## License
 

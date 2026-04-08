@@ -1,30 +1,41 @@
-# harn
+# anima
 
-> Help humans harness AI agents — not just use them.
+> Plant seeds, not templates. Cultivate agents, don't configure them.
 
-## What This Project Is
+## Project State
 
-`harn` is a project that helps engineers adopt **harness engineering** — the discipline of designing environments, feedback loops, and control systems that make AI coding agents effective. The name comes from "harness": the structure around the model, not the model itself.
+**Phase: Germination.** The intellectual foundation is established. No implementation exists.
 
-Many engineers today treat AI agents as autocomplete with extra steps. Harness engineering is the recognition that **the environment bounds the agent's output quality, not the model**. `harn` exists to make that environment easy to build and maintain.
+anima will be a tool that plants growth-capable seeds into new projects — minimal structures from which a harness grows through practice, not templates that prescribe one. The guiding documents are written and stable. The next step is determining what `anima init` concretely produces.
 
-The project's final form — CLI tool, library, framework, or something else — is deliberately undecided. The guiding principles are settled; the product shape will emerge from them.
+## Documents
 
-## Guiding Documents
+The Philosophy defines anima's identity. The Spec and Guide provide the underlying discipline theory — written from a control perspective that the Philosophy deliberately reinterprets through a cultivation lens.
 
-These two documents are the intellectual foundation of the project. All design decisions trace back to them.
+| File | Role |
+|---|---|
+| [PHILOSOPHY.md](docs/PHILOSOPHY.md) | anima's product philosophy: cultivation over control |
+| [HARNESS-SPEC.md](docs/HARNESS-SPEC.md) | Prescriptive spec for harness engineering (discipline-level) |
+| [HARNESS-GUIDE.md](docs/HARNESS-GUIDE.md) | Reasoning guide for harness design (discipline-level) |
 
-- [Harness Specification](docs/HARNESS-SPEC.md) — prescriptive spec: what to build, with obligation levels (MUST/SHOULD/MAY)
-- [Harness Guide](docs/HARNESS-GUIDE.md) — companion guide: how to think about harness design, with rationale and decision frameworks
+Each document has a Chinese translation (`*.zh-CN.md`) alongside.
 
-The spec and guide are built on three structural contradictions inherent to human-agent systems (intent transfer, self-evaluation, entropy) and three axioms derived from them (governance, strategy, mechanism). Read the guide's §1–2 for the full analysis.
+## Structure
 
-## Project Status
-
-**Phase: foundational thinking.** The guiding documents are written and stable. No implementation exists. The next step is determining what form the tool takes and how it delivers the spec's principles to working engineers.
+```
+AGENTS.md              # you are here
+README.md              # public-facing description
+docs/
+  PHILOSOPHY.md        # product philosophy (anima-specific)
+  HARNESS-SPEC.md      # prescriptive spec (discipline-level)
+  HARNESS-GUIDE.md     # reasoning guide (discipline-level)
+  *.zh-CN.md           # Chinese translations
+```
 
 ## Conventions
 
-- English is the primary language; Chinese translations are maintained alongside
+- English is the primary language; Chinese translations maintained for all documents
+- English written first; Chinese translated to match (信达雅 standard)
+- All project knowledge lives in the repository — if it's not in the repo, it doesn't exist
 - Guiding documents live in `docs/`
-- All project knowledge is stored in the repository (if it's not in the repo, it doesn't exist)
+- The Philosophy interprets the Spec/Guide but does not override them
