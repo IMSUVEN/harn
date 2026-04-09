@@ -33,6 +33,8 @@ Each document in `docs/` has a Chinese translation (`*.zh-CN.md`) alongside.
 
 ## Cultivation
 
+Run `anima check` to see which areas of the harness need attention.
+
 This project practices what it preaches. As you work on anima:
 
 - **Decisions**: When a significant choice is made — about philosophy, seed
@@ -50,3 +52,5 @@ This project practices what it preaches. As you work on anima:
 - **This file**: Keep this file honest. When the project's state changes, update
   the State section. When new knowledge locations appear, update the Map. This
   file should always reflect what is, not what should be.
+
+<!-- anima:seed:2 -->

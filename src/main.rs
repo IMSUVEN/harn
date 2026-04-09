@@ -6,6 +6,18 @@ const SEED_AGENTS: &str = include_str!("../seed/AGENTS.md");
 const SEED_ARCHITECTURE: &str = include_str!("../seed/docs/ARCHITECTURE.md");
 const SEED_DECISIONS_README: &str = include_str!("../seed/docs/decisions/README.md");
 
+const CURRENT_SEED_GENERATION: u32 = 2;
+
+struct SeedUpdate {
+    generation: u32,
+    description: &'static str,
+}
+
+const SEED_UPDATES: &[SeedUpdate] = &[SeedUpdate {
+    generation: 2,
+    description: "Add `anima check` awareness to Cultivation section",
+}];
+
 #[derive(Parser)]
 #[command(name = "anima", about = "Plant seeds, not templates.")]
 struct Cli {
@@ -104,6 +116,8 @@ fn run_check() -> io::Result<()> {
     let decisions = count_decisions()?;
     let conventions = count_conventions(&agents);
 
+    let planted_gen = detect_seed_generation(&agents);
+
     println!("  state:         {phase_display}");
     println!("  architecture:  {arch}");
     println!(
@@ -122,6 +136,11 @@ fn run_check() -> io::Result<()> {
             format!("{conventions} established")
         }
     );
+    if planted_gen < CURRENT_SEED_GENERATION {
+        println!(
+            "  seed:          v{planted_gen} \u{2192} v{CURRENT_SEED_GENERATION} available"
+        );
+    }
     println!();
 
     let mut dormant: Vec<&str> = Vec::new();
@@ -144,6 +163,16 @@ fn run_check() -> io::Result<()> {
         println!("  The seed is planted but dormant. Growth begins with practice.");
     } else {
         println!("  Dormant areas: {}", dormant.join(", "));
+    }
+
+    if planted_gen < CURRENT_SEED_GENERATION {
+        println!();
+        println!("  Seed updates available:");
+        for update in SEED_UPDATES {
+            if update.generation > planted_gen {
+                println!("    v{}: {}", update.generation, update.description);
+            }
+        }
     }
 
     Ok(())
@@ -192,6 +221,20 @@ fn count_decisions() -> io::Result<usize> {
         }
     }
     Ok(count)
+}
+
+fn detect_seed_generation(content: &str) -> u32 {
+    for line in content.lines().rev() {
+        let trimmed = line.trim();
+        if let Some(rest) = trimmed.strip_prefix("<!-- anima:seed:") {
+            if let Some(num_str) = rest.strip_suffix(" -->") {
+                if let Ok(n) = num_str.parse::<u32>() {
+                    return n;
+                }
+            }
+        }
+    }
+    1
 }
 
 fn count_conventions(content: &str) -> usize {

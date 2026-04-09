@@ -35,6 +35,19 @@ user's project. The only parameterized value is `{project-name}` in
 `seed/AGENTS.md`. The seed implements Philosophy §4 and addresses the memory
 paradox identified in §6.2 through its cultivation protocol.
 
+### Seed Generations
+
+Seeds are versioned by generation — a simple integer incremented when a
+meaningful capability is added. The marker `<!-- anima:seed:N -->` at the end
+of `seed/AGENTS.md` records the generation. Seeds without a marker are
+generation 1 (all seeds planted before this mechanism existed).
+
+`anima check` detects the planted generation and, if it's behind the current
+generation, outputs specific upgrade suggestions. The agent reads these
+suggestions and applies them — no forced overwrite, because the seed files are
+living documents that the project has already modified. This is cultivation,
+not control: observe, suggest, let the agent act.
+
 ## The CLI
 
 ```

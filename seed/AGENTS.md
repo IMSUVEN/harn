@@ -23,6 +23,8 @@ _None yet. Add conventions here as they emerge from practice._
 
 ## Cultivation
 
+Run `anima check` to see which areas of the harness need attention.
+
 This project's harness grows from practice, not from templates. As you work:
 
 - **Decisions**: When a significant technical choice is made — one that would
@@ -40,3 +42,5 @@ This project's harness grows from practice, not from templates. As you work:
 - **This file**: Keep this file honest. When the project's state changes,
   update the State section. When new knowledge structures appear, update the
   Map. This file should always reflect what is, not what should be.
+
+<!-- anima:seed:2 -->
