@@ -22,6 +22,10 @@ docs/decisions/        — 随手记录决定
 
 ## 安装
 
+从 [GitHub Releases](https://github.com/IMSUVEN/anima/releases) 下载预编译二进制文件，放入 PATH 即可。
+
+或从源码构建：
+
 ```bash
 cargo install --git https://github.com/IMSUVEN/anima
 ```

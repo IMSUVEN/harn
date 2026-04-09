@@ -22,6 +22,10 @@ No technology stack is prescribed. No linter rules. No test framework. The right
 
 ## Install
 
+Download a pre-built binary from [GitHub Releases](https://github.com/IMSUVEN/anima/releases) and place it on your PATH.
+
+Or build from source:
+
 ```bash
 cargo install --git https://github.com/IMSUVEN/anima
 ```

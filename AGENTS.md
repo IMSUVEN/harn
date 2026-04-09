@@ -20,6 +20,7 @@ anima plants growth-capable seeds into new projects — minimal structures from 
 | [seed/](seed/) | The concrete seed that `anima init` plants |
 | [src/main.rs](src/main.rs) | CLI implementation (Rust) |
 | [Cargo.toml](Cargo.toml) | Rust project manifest |
+| [.github/workflows/](.github/workflows/) | CI (test on push/PR) and release (build binaries on tag) |
 
 Each document in `docs/` has a Chinese translation (`*.zh-CN.md`) alongside.
 
@@ -30,6 +31,8 @@ Each document in `docs/` has a Chinese translation (`*.zh-CN.md`) alongside.
 - All project knowledge lives in the repository — if it's not in the repo, it doesn't exist
 - Guiding documents live in `docs/`
 - The Philosophy interprets the Spec/Guide but does not override them
+- Parsing functions that power `anima check` must have unit tests; run `cargo test` before committing
+- Releases are tagged `vX.Y.Z`; CI builds and publishes binaries automatically
 
 ## Cultivation
 

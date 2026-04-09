@@ -73,6 +73,24 @@ Two commands exist:
   architecture documentation, decision records, conventions) and produces a
   compact summary designed for agent consumption at session start.
 
+## Engineering Infrastructure
+
+Unit tests in `src/main.rs` (`#[cfg(test)] mod tests`) cover the parsing
+functions that power `anima check`: phase extraction, seed generation detection,
+convention counting, and seed embed integrity. These are the spirit's sensory
+organs — they must be reliable.
+
+GitHub Actions provides two workflows:
+
+- **CI** (`.github/workflows/ci.yml`): Runs `cargo test` and `cargo build` on
+  all three platforms (Linux, macOS, Windows) for every push to `main` and every
+  pull request.
+
+- **Release** (`.github/workflows/release.yml`): Triggered by version tags
+  (`v*`). Builds release binaries for four targets (x86_64 Linux, x86_64 macOS,
+  aarch64 macOS, x86_64 Windows), packages them, and publishes to GitHub
+  Releases with auto-generated release notes.
+
 ## Translations
 
 Every document in `docs/` has a Chinese translation (`*.zh-CN.md`) alongside.

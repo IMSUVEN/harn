@@ -260,3 +260,114 @@ fn count_conventions(content: &str) -> usize {
     }
     count
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn extract_phase_germination() {
+        let content = "## State\n\n**Phase: Germination.**\n\nSome text.";
+        assert_eq!(extract_phase(content), Some("Germination".to_string()));
+    }
+
+    #[test]
+    fn extract_phase_custom() {
+        let content = "## State\n\n**Phase: Rooting.** Two commands live.";
+        assert_eq!(extract_phase(content), Some("Rooting".to_string()));
+    }
+
+    #[test]
+    fn extract_phase_without_trailing_dot() {
+        let content = "**Phase: Growing**";
+        assert_eq!(extract_phase(content), Some("Growing".to_string()));
+    }
+
+    #[test]
+    fn extract_phase_missing() {
+        let content = "## State\n\nNo phase line here.";
+        assert_eq!(extract_phase(content), None);
+    }
+
+    #[test]
+    fn detect_generation_v2_marker() {
+        let content = "Some content\n\n<!-- anima:seed:2 -->";
+        assert_eq!(detect_seed_generation(content), 2);
+    }
+
+    #[test]
+    fn detect_generation_v3_marker() {
+        let content = "Content\n<!-- anima:seed:3 -->\n";
+        assert_eq!(detect_seed_generation(content), 3);
+    }
+
+    #[test]
+    fn detect_generation_no_marker() {
+        let content = "## Cultivation\n\nJust directives, no marker.";
+        assert_eq!(detect_seed_generation(content), 1);
+    }
+
+    #[test]
+    fn detect_generation_malformed_marker() {
+        let content = "<!-- anima:seed:abc -->";
+        assert_eq!(detect_seed_generation(content), 1);
+    }
+
+    #[test]
+    fn count_conventions_none() {
+        let content = "## Conventions\n\n_None yet. Add conventions here._\n\n## Cultivation";
+        assert_eq!(count_conventions(content), 0);
+    }
+
+    #[test]
+    fn count_conventions_some() {
+        let content = "\
+## Conventions
+
+- English is the primary language
+- All knowledge lives in the repo
+* Star-prefixed convention
+
+## Cultivation";
+        assert_eq!(count_conventions(content), 3);
+    }
+
+    #[test]
+    fn count_conventions_at_end_of_file() {
+        let content = "## Conventions\n\n- Only one convention";
+        assert_eq!(count_conventions(content), 1);
+    }
+
+    #[test]
+    fn seed_embeds_are_nonempty() {
+        assert!(!SEED_AGENTS.is_empty());
+        assert!(!SEED_ARCHITECTURE.is_empty());
+        assert!(!SEED_DECISIONS_README.is_empty());
+    }
+
+    #[test]
+    fn seed_agents_has_placeholder() {
+        assert!(SEED_AGENTS.contains("{project-name}"));
+    }
+
+    #[test]
+    fn seed_agents_has_generation_marker() {
+        assert!(SEED_AGENTS.contains("<!-- anima:seed:"));
+    }
+
+    #[test]
+    fn seed_generation_matches_current() {
+        let detected = detect_seed_generation(SEED_AGENTS);
+        assert_eq!(detected, CURRENT_SEED_GENERATION);
+    }
+
+    #[test]
+    fn seed_updates_cover_all_generations() {
+        for g in 2..=CURRENT_SEED_GENERATION {
+            assert!(
+                SEED_UPDATES.iter().any(|u| u.generation == g),
+                "missing seed update entry for generation {g}"
+            );
+        }
+    }
+}

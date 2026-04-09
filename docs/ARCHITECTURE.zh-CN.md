@@ -50,6 +50,16 @@ CLI 在编译时通过 `include_str!` 嵌入种子文件，因此二进制是自
 
 - **`anima check`**：读取项目的 harness 文件并报告其培育状态——哪些区域已生长、哪些仍休眠。这是精灵的第一个「感官」：它观察四个信号（状态阶段、架构文档、决定记录、约定），产出一段紧凑的摘要，设计为供智能体在会话开始时使用。
 
+## 工程基础设施
+
+`src/main.rs` 中的单元测试（`#[cfg(test)] mod tests`）覆盖驱动 `anima check` 的解析函数：阶段提取、种子代际检测、约定计数、种子嵌入完整性。这些是精灵的感官器官——必须可靠。
+
+GitHub Actions 提供两条工作流：
+
+- **CI**（`.github/workflows/ci.yml`）：每次推送至 `main` 及每个 Pull Request 时，在三个平台（Linux、macOS、Windows）上运行 `cargo test` 和 `cargo build`。
+
+- **Release**（`.github/workflows/release.yml`）：由版本标签（`v*`）触发。为四个目标（x86_64 Linux、x86_64 macOS、aarch64 macOS、x86_64 Windows）编译发布二进制，打包后发布至 GitHub Releases，附自动生成的发布说明。
+
 ## 翻译
 
 `docs/` 中每份文档均有中文翻译（`*.zh-CN.md`）随附。先写英文，再译中文（信达雅标准）。翻译平行维护——英文版的变更须在同一 commit 中对应修改中文版。
